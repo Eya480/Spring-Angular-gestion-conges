@@ -1,0 +1,15 @@
+.hover-scale:hover {
+    transform: scale(1.1); /* Effet de zoom au survol */
+}
+
+.nav-link.active {
+    font-weight: bold; /* Texte en gras pour les liens actifs */
+}
+
+.navbar-nav .nav-item {
+    margin-right: 10px; /* Espacement entre les éléments de la navbar */
+}
+
+.btn-outline-danger {
+    transition: background-color 0.3s, color 0.3s; /* Transition pour le bouton de déconnexion */
+}
