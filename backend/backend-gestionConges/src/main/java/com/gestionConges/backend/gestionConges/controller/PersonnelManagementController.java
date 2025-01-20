@@ -39,7 +39,7 @@ public class PersonnelManagementController {
     public ResponseEntity<ReqRes> updateUser(@PathVariable Integer userId, @RequestBody Personnel p){
         return ResponseEntity.ok(personnelManagementService.updatePersonnel(userId,p));
     }
-    @GetMapping("/adminRhUserManager/get-profile")
+    @GetMapping("/adminRhUserManagerAdmin/get-profile")
     public ResponseEntity<ReqRes> getMyProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();

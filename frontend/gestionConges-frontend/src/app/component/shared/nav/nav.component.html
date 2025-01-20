@@ -24,15 +24,14 @@
                 </li>
                 }
 
-                <!-- Profile visible si authentifié et pas administrateur
+                <!-- Profile visible si authentifié et pas administrateur-->
                 @if(isAuthenticated && !isAdmin) {
                 <li class="nav-item">
                     <a class="nav-link active d-flex align-items-center" routerLink="/profile">
-                        <i class="bi bi-person-circle me-2"></i> 
                         Profile
                     </a>
                 </li> 
-                } -->
+                }
 
                 <!-- Dashboard Admin RH -->
                 @if(isAuthenticated && isAdminRH) {

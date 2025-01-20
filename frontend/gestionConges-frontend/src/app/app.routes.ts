@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './component/auth/login/login.component';
+import { ProfileComponent } from './component/shared/profile/profile.component';
+import { guardGuard } from './component/guard/guard.guard';
 
 export const routes:  Routes = [
     {
@@ -18,6 +20,7 @@ export const routes:  Routes = [
     path: 'manager',
     loadChildren: () => import('./component/manager/manager.module').then(m => m.ManagerModule) // Lazy load ManagerModule
   },
+  {path: 'profile', component: ProfileComponent, canActivate: [guardGuard]},
   {
     path: 'login', // Login page
     component: LoginComponent

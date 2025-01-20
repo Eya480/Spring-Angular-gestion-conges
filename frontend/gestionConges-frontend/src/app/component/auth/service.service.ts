@@ -10,7 +10,9 @@ export class ServiceService {
   private url="http://localhost:8080";
   constructor(private http: HttpClient,private router: Router) { }
   login(email: string, password: string): Observable<any> {
-    return this.http.post(`${this.url}/auth/login`, { email, password });
+    const url = `${this.url}/auth/login`;
+    const body = { email, pwd: password }; // Assurez-vous que les clés sont correctes
+    return this.http.post(url, body);
   }
 
   register(userData: any, token: string): Observable<any> {
@@ -25,8 +27,13 @@ export class ServiceService {
     return this.http.post<any>(url, userData, { headers });
   }
 
-  getProfile(): Observable<any> {
-    return this.http.get(`${this.url}/adminRhUserManager/get-profile`);
+  getProfile(token: string): Observable<any> {
+    const url = `${this.url}/adminRhUserManagerAdmin/get-profile`;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+  
+    return this.http.get<any>(url, { headers });
   }
   logOut(): void {
     if (typeof localStorage !== 'undefined') {

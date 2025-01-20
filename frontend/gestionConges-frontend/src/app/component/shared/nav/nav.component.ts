@@ -4,7 +4,7 @@ import { ServiceService } from '../../auth/service.service';
 
 @Component({
   selector: 'app-nav',
-  imports: [RouterModule,],
+  imports: [RouterModule],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })

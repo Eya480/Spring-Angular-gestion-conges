@@ -1,6 +1,7 @@
-footer {
+.footer {
     background-color: #f8f9fa; /* Couleur de fond optionnelle */
-    padding: 2px 0;
+    padding: 20px 0; /* Ajustez le padding selon vos besoins */
     text-align: center;
     box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1); /* Optionnel : effet d'ombre */
-}
+    margin-top: auto; /* Pousse le footer vers le bas */
+  }

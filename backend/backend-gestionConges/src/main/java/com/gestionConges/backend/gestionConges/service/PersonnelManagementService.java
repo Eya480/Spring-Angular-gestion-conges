@@ -5,6 +5,7 @@ import com.gestionConges.backend.gestionConges.model.Personnel;
 import com.gestionConges.backend.gestionConges.repository.PersonnelRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -71,9 +72,12 @@ public class PersonnelManagementService {
             response.setExpirationTime("1Hr"); // Durée de vie du token d'accès
             response.setMessage("Connexion réussie");
 
+        } catch (BadCredentialsException e) {
+            response.setStatusCode(401); // 401 pour "Bad credentials"
+            response.setMessage("Identifiants incorrects");
         } catch (Exception e) {
             response.setStatusCode(500);
-            response.setMessage(e.getMessage());
+            response.setMessage("Erreur interne du serveur : " + e.getMessage());
         }
         return response;
     }

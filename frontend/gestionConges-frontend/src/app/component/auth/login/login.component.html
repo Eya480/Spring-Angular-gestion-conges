@@ -1,1 +1,84 @@
-<p>login works!</p>
+<section class="vh-60">
+    <div class="container py-5 h-60">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-xl-10">
+                <div class="card shadow-lg" style="border-radius: 1rem; backdrop-filter: blur(8px); background: rgba(255, 255, 255, 0.8);">
+                    <div class="row g-0">
+                        <!-- Image Section -->
+                        <div class="col-md-6 col-lg-5 d-none d-md-block">
+                            <img src="assets/login.jpg"
+                                alt="Formulaire de connexion" 
+                                class="img-fluid" 
+                                style="border-radius: 1rem 0 0 1rem; object-fit: cover;" />
+                        </div>
+
+                        <!-- Form Section -->
+                        <div class="col-md-7">
+                            <div class="card-body p-5 d-flex flex-column justify-content-center">
+                                <h2 class="text-center fw-bold mb-4">Bienvenue</h2>
+                                <p class="text-center text-muted mb-4">
+                                    Connectez-vous pour accéder à votre compte
+                                </p>
+
+                                <form [formGroup]="login"  (ngSubmit)="loginUser(login)">
+                                    <!-- Email Input -->
+                                    <div class="form-floating mb-3">
+                                        <input 
+                                        type="email" 
+                                        id="emailInput" 
+                                        formControlName="email" 
+                                        class="form-control" 
+                                        placeholder="Adresse e-mail" 
+                                        required
+                                        >
+                                        <label for="emailInput">*Adresse e-mail</label>
+                                        @if(login.controls['email'].touched && login.controls['email'].invalid){
+                                            <span class="error">email invalide</span>
+                                        }
+                                    </div>
+
+                                    <!-- Password Input -->
+                                    <div class="form-floating mb-3">
+                                        <input 
+                                          type="password" 
+                                          id="passwordInput" 
+                                          formControlName="password" 
+                                          class="form-control" 
+                                          placeholder="Mot de passe" 
+                                          required>
+                                        <label for="passwordInput">*Mot de passe</label>
+                                        @if(login.controls['password'].touched && login.controls['password'].invalid){
+                                            <span class="error">Ce champ est obligatoire</span>
+                                        }
+                                    </div>
+                                     <!-- Error Message -->
+                                     @if (errorMessage){
+                                        <div class="alert alert-danger mt-3" [innerHTML]="errorMessage">
+                                                        {{ errorMessage }}
+                                        </div>
+                                    }
+                                    <!-- Login Button -->
+                                    <div class="d-grid mb-4">
+                                        <button type="submit" class="btn btn-success btn-lg"
+                                        [disabled]="login.invalid"
+                                        >
+                                            Se connecter
+                                        </button>
+                                    </div>
+
+                                    <!-- Register Link -->
+                                    <p class="text-center">
+                                        <span>Vous n'avez pas de compte ?</span>
+                                        <a href="public/register" class="text-decoration-none text-success fw-bold">
+                                            Inscrivez-vous ici
+                                        </a>
+                                    </p>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

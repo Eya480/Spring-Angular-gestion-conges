@@ -6,8 +6,8 @@ export const guardGuard: CanActivateFn = (route, state) => {
   const authService = inject(ServiceService);
   const router = inject(Router);
 
-  // Check if the user is authenticated and if the role is "User"
-  if (authService.isAuthenticated() && authService.isUser()) {
+  // Autoriser l'accès si l'utilisateur est authentifié, quel que soit son rôle
+  if (authService.isAuthenticated()) {
     return true;  // Allow access
   } else {
     router.navigate(['/login']);  // Redirect to login page
