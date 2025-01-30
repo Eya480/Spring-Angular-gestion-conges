@@ -1,0 +1,39 @@
+/* src/app/admin-rh/admin-rh.component.css */
+
+/* Personnalisation des cartes et des graphiques */
+.custom-card {
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .custom-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .custom-card-header {
+    background-color: #f8f9fa;
+    font-size: 1.2rem;
+    padding: 12px;
+  }
+  
+  .card-body {
+    padding: 20px;
+  }
+  
+  .table-hover tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Boutons */
+  .btn-info {
+    background-color: #17A2B8;
+    color: white;
+    border-radius: 8px;
+    padding: 6px 12px;
+  }
+  th{
+ background-color: rgb(192, 233, 205);
+  }
+  

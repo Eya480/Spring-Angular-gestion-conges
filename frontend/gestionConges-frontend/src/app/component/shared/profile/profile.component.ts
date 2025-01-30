@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ServiceService } from '../../auth/service.service';
+import { ServiceService } from '../service.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -22,9 +22,13 @@ export class ProfileComponent implements OnInit{
   
     this.authService.getProfile(token).subscribe({
       next: (response) => {
+        //console.log(response)
         this.profileInfo = response.personnel; // Stocker les informations du profil
+        //console.log(response.personnel);
       },
       error: (error) => {
+        //console.log(error)
+        
         this.showError(error.message); // Afficher l'erreur
       },
     });

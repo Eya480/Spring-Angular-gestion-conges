@@ -1,1 +1,85 @@
-<p>dashboard works!</p>
+<div class="container mt-4">
+  <div class="row">
+    <!-- Solde de congés -->
+    <div class="col-md-4 mb-4">
+      <div class="card custom-card text-white" style="background-color: rgb(9, 24, 14);">
+        <div class="card-body">
+          <h5 class="card-title">Demande en attente</h5>
+          <p class="card-text display-4">{{att}}</p>
+        </div>
+      </div>
+    </div>
+    <!-- Demandé en attente -->
+    <div class="col-md-4 mb-4">
+      <div class="card custom-card text-black" style="background-color: rgb(83, 204, 93);">
+        <div class="card-body">
+          <h5 class="card-title">Demandes en Réfusées</h5>
+          <p class="card-text display-4">{{refuse}}</p>
+        </div>
+      </div>
+    </div>
+    <!-- Demandé approuvé -->
+    <div class="col-md-4 mb-4">
+      <div class="card custom-card text-white" style="background-color: rgb(116, 128, 13);">
+        <div class="card-body">
+          <h5 class="card-title">Demandes approuvées</h5>
+          <p class="card-text display-4">{{approuve}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 mb-4">
+      <div class="card custom-card text-black" style="background-color: rgb(108, 233, 77);">
+        <div class="card-body">
+          <h5 class="card-title">Demande d'extension en attente</h5>
+          <p class="card-text display-4">{{ext}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card custom-card text-white" style="background-color: rgb(12, 88, 38);">
+        <div class="card-body">
+          <h5 class="card-title">Total Type Congés</h5>
+          <p class="card-text display-4">{{nbtypeConges}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card custom-card text-black"  style="background-color: rgb(79, 214, 124);">
+        <div class="card-body">
+          <h5 class="card-title">Total Employés</h5>
+          <p class="card-text display-4">{{employees?.length}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Tableau des Départements -->
+  <div class="card mt-4" style="border: 1px solid grey;">
+    <div class="card-header custom-card-header text-black fw-bold">Demandes de Congé par Département</div>
+    <div class="card-body">
+      <table class="table table-hover">
+        <thead >
+          <tr>
+            <th>Département</th>
+            <th>Manager</th>
+            <th>Demandes en Attente</th>
+            <th>Demandes Validées</th>
+            <th>Demandes Refusées</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for(departement of departements; track departement){
+          <tr>
+            <td>{{ departement.nomDep }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

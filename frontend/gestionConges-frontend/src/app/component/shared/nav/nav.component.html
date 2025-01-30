@@ -1,74 +1,88 @@
-<nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
-    <div class="container-fluid">
-        <!-- Logo avec une animation au survol -->
-        <a class="navbar-brand" routerLink="/">
-            <div style="padding: 5px; border-radius: 5px; transition: transform 0.2s;">
-                <img src="assets/logo.png" alt="Logo" style="height: 40px; width: auto;" class="hover-scale" />
-            </div>
-        </a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-black p-3 shadow-sm">
+  <div class="container-fluid">
+    <!-- Logo -->
+    <a class="navbar-brand" routerLink="/">
+      <img src="assets/logo.png" alt="Logo" class="logo" />
+    </a>
 
-        <!-- Bouton de toggler pour les petits écrans -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <!-- Bouton pour petits écrans -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <!-- Contenu de la barre de navigation -->
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <!-- Login visible si non authentifié -->
-                @if(!isAuthenticated) {
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/login">
-                        Login
-                    </a>
-                </li>
-                }
+    <!-- Liens de navigation -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        @if(!isAuthenticated) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/login">Connexion</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/register">Inscription</a>
+          </li>
+        }
 
-                <!-- Profile visible si authentifié et pas administrateur-->
-                @if(isAuthenticated && !isAdmin) {
-                <li class="nav-item">
-                    <a class="nav-link active d-flex align-items-center" routerLink="/profile">
-                        Profile
-                    </a>
-                </li> 
-                }
+        @if(isAuthenticated) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/profile">Profil</a>
+          </li>
+        }
 
-                <!-- Dashboard Admin RH -->
-                @if(isAuthenticated && isAdminRH) {
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/adminRH/dashboard">
-                        Dashboard Admin RH
-                        <span class="visually-hidden">(current)</span>
-                    </a>
-                </li>
-                }
+        @if(isAuthenticated && isAdminRH) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/adminRH">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/adminRH/typeConges">Types Congés</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/adminRH/employees">Employés</a>
+          </li>
+        }
 
-                <!-- Dashboard Employé -->
-                @if(isAuthenticated && isUser) {
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/employee/dashboard">
-                        Dashboard Employé
-                        <span class="visually-hidden">(current)</span>
-                    </a>
-                </li>
-                }
+        @if(isAuthenticated && isManager){
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/manager">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/manager/historiqueDemandesEquipe">Historique Demandes Congés</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/manager/demandeEnAttente">Demandes En Attente</a>
+          </li>
+        }
 
-                <!-- Lien vers la gestion des employés (visible pour Admin RH seulement) -->
-                @if(isAuthenticated && isAdminRH) {
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/adminRH/gestion-employes">
-                        Gestion des Employés
-                    </a>
-                </li>
-                }
-            </ul>
+        @if(isAuthenticated && isUser) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/employee">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/employee/demandeConges">Demande Congés</a>
+          </li>
+        }
 
-            <!-- Déconnexion visible si authentifié -->
-            @if(isAuthenticated) {
-            <button type="button" class="btn btn-outline-danger d-flex align-items-center" (click)="logout()">
-                Se déconnecter
-            </button>
-            }
-        </div>
+        @if(isAuthenticated && isAdmin){
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin/departement">Département</a>
+          </li>
+        }
+      </ul>
+
+      <!-- Bouton de déconnexion -->
+      @if(isAuthenticated) {
+        <button class="btn btn-outline-light" (click)="logout()" style="margin-left: 20px;">Se déconnecter</button>
+      }
     </div>
+  </div>
 </nav>

@@ -1,0 +1,36 @@
+.card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    border-radius: 15px 15px 0 0;
+  }
+
+  .card .card {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  .card .card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+
+  .bi {
+    vertical-align: middle;
+  }
+
+  .btn-outline-success {
+    border-radius: 25px;
+    padding: 8px 20px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+  }

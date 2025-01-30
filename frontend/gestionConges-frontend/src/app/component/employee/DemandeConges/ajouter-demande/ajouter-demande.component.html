@@ -1,0 +1,99 @@
+<div class="container py-4" style="margin-bottom: 80px;">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0" style="border-radius: 1rem; backdrop-filter: blur(10px); background: rgba(240, 240, 240, 0.95);">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-start mb-3">
+            <a class="btn btn-outline-secondary btn-sm px-3" [routerLink]="['/employee/demandeConges']">
+              <i class="bi bi-arrow-left me-1"></i> Retour
+            </a>
+          </div>
+          <h4 class="text-center fw-bold mb-3 text-success">Demander un Congé</h4>
+
+          <form [formGroup]="AddDemandeForm" (ngSubmit)="onSubmit()">
+            <!-- Ligne contenant deux champs -->
+            <div class="row g-3 mb-3">
+              <!-- Date de début -->
+              <div class="col-md-6">
+                <div class="form-floating">
+                  <input
+                    type="date"
+                    id="dateDebut"
+                    formControlName="dateDebut"
+                    class="form-control shadow-sm"
+                    placeholder="Date Début"
+                    required
+                  />
+                  <label for="dateDebut">*Date de début</label>
+                  @if(AddDemandeForm.controls['dateDebut'].touched && AddDemandeForm.controls['dateDebut'].invalid) {
+                    <small class="text-danger">Obligatoire</small>
+                  }
+                </div>
+              </div>
+
+              <!-- Date de fin -->
+              <div class="col-md-6">
+                <div class="form-floating">
+                  <input
+                    type="date"
+                    id="dateFin"
+                    formControlName="dateFin"
+                    class="form-control shadow-sm"
+                    placeholder="Date Fin"
+                    required
+                  />
+                  <label for="dateFin">*Date de fin</label>
+                  @if(AddDemandeForm.controls['dateFin'].touched && AddDemandeForm.controls['dateFin'].invalid) {
+                    <small class="text-danger">Obligatoire</small>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <!-- Type de congé -->
+            <div class="form-floating mb-3">
+              <select formControlName="nomTypeConge" class="form-select shadow-sm" required>
+                <option value="" disabled selected>Choisir un Type Congé</option>
+                @for(type of typeConges ; track type.idTypeConge) {
+                  <option [value]="type.nomTypeConge">{{ type.nomTypeConge }}</option>
+                }
+              </select>
+              <label for="nomTypeConge">*Type Congé</label>
+            </div>
+
+            <!-- Raison -->
+            <div class="form-floating mb-3">
+              <textarea
+                id="reason"
+                formControlName="reason"
+                class="form-control shadow-sm"
+                placeholder="Raison"
+                maxlength="50"
+                required
+                style="height: 100px;"
+              ></textarea>
+              <label for="reason">*Raison</label>
+              @if(AddDemandeForm.controls['reason'].touched && AddDemandeForm.controls['reason'].invalid) {
+                <small class="text-danger">Obligatoire</small>
+              }
+            </div>
+
+            <!-- Messages d'erreur -->
+            @if(errorMessage) {
+              <div class="alert alert-danger mt-3">
+                {{ errorMessage }}
+              </div>
+            }
+
+            <!-- Bouton de soumission -->
+            <div class="d-grid mt-3">
+              <button type="submit" class="btn btn-success btn-sm shadow-sm" [disabled]="AddDemandeForm.invalid">
+                <i class="bi bi-send me-1"></i> Soumettre
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

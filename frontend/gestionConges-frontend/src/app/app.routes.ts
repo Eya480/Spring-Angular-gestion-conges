@@ -1,7 +1,8 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './component/auth/login/login.component';
 import { ProfileComponent } from './component/shared/profile/profile.component';
-import { guardGuard } from './component/guard/guard.guard';
+import { guardGuard, unauthenticatedGuard } from './component/guard/guard.guard';
+import { RegisterComponent } from './component/auth/register/register.component';
 
 export const routes:  Routes = [
     {
@@ -25,7 +26,12 @@ export const routes:  Routes = [
     path: 'login', // Login page
     component: LoginComponent
   },
-  { path: '**', redirectTo: '/login' }, // Wildcard route for unknown paths
+  {
+    path: 'register', // Register page
+    component: RegisterComponent,
+    canActivate: [unauthenticatedGuard] // Only unauthenticated users can access
+  },
+  { path: '**', redirectTo: '/login' }, 
   { path: '', redirectTo: '/login', pathMatch: 'full' } // Default route
 ];
 

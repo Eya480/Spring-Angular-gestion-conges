@@ -1,0 +1,48 @@
+<div class="container py-5" style="margin-bottom: 100px;">
+    <div class="row justify-content-center">
+      <div class="col-md-5">
+        <div class="card shadow-lg" style="border-radius: 1rem; backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.8);">
+          <div class="card-body p-4">
+            <h2 class="text-center fw-bold mb-3">Ajouter un Type de Congés</h2>
+  
+            <form [formGroup]="AddTypeCForm" (ngSubmit)="onSubmit()">
+              <!-- CIN -->
+              <div class="form-floating mb-3">
+                <input type="text" id="nomTypeConge" formControlName="nomTypeConge" class="form-control" placeholder="Le Nom du Type Congés" required>
+                <label for="nomTypeConge">*Le Nom du Type Congés</label>
+                @if(AddTypeCForm.controls['nomTypeConge'].touched && AddTypeCForm.controls['nomTypeConge'].invalid){
+                  <span class="error">Ce champ est obligatoire!</span>
+                }
+              </div>
+  
+              <!-- Description -->
+              <div class="form-floating mb-3">
+                <input type="text" id="descriptionc" formControlName="descriptionC" class="form-control" placeholder="Description">
+                <label for="description">Description</label>
+              </div>
+
+              <div class="form-floating mb-4 d-flex justify-content-center align-items-center">
+              <div class="form-check">
+                <label for="soldeImpacte">Impact sur le solde ?</label>
+                <input class="form-check-input" type="checkbox" value="true" formControlName="affecteSoldeConge" style="background-color: green;">
+              </div>
+            </div>
+  
+              <!-- Messages d'erreur et de succès -->
+              @if(errorMessage){
+                <div class="alert alert-danger mt-2">
+                  {{ errorMessage }}
+                </div>
+              }
+              <!-- Bouton de soumission -->
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary" [disabled]="AddTypeCForm.invalid">
+                  Ajouter
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

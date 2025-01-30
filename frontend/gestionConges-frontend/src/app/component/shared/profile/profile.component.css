@@ -1,0 +1,54 @@
+/* Card with smaller size and fully transparent background */
+.profile-card {
+  background-color: rgba(17, 17, 17, 0.678); /* Slightly transparent background */
+  border: none; /* No border */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow to make it stand out */
+  max-width: 700px; /* Smaller width */
+  margin: auto; /* Centering the card */
+  backdrop-filter: blur(10px); /* Blur effect for a frosted glass look */
+  border-radius: 15px; /* Rounded corners */
+}
+
+/* Header of the profile card */
+.profile-header {
+  background-color: rgba(247, 193, 112, 0.8); /* Slightly transparent header */
+  text-align: center;
+  padding: 10px;
+  border-radius: 15px 15px 0 0; /* Rounded corners on top */
+}
+
+/* Image border and shadow for the profile picture */
+.rounded-circle {
+  border: 4px solid rgba(255, 255, 255, 0.8); /* Semi-transparent white border around the profile image */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for the profile image */
+}
+
+/* Text and color styles */
+.text-dark {
+  color: #ffffff !important; /* White text color for better contrast */
+}
+
+.text-success {
+  color: #fdfffc !important; /* Same color as the nav background */
+}
+
+.btn-success {
+  background-color: #12a844; /* Matching button with nav */
+  border-color: #13961e;
+  transition: background-color 0.3s ease;
+}
+
+.btn-success:hover {
+  background-color: #13962f; /* Darker on hover */
+  border-color: #117a8b;
+}
+
+/* Adjust padding in the card body */
+.card-body {
+  padding: 15px; /* Smaller padding for a compact look */
+}
+
+/* Ensure margin between the profile photo and the information */
+.card-body .row .col-md-4 {
+  margin-bottom: 15px;
+}

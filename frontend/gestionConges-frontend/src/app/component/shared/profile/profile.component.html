@@ -1,74 +1,106 @@
-<div class="container mt-3">
-    <!-- Affichage des erreurs -->
-    @if(errorMessage){
-    <div class="alert alert-danger" role="alert">
-      {{errorMessage}}
+<div class="container mt-5">
+  <!-- Affichage des erreurs -->
+  @if(errorMessage){
+  <div class="alert alert-danger" role="alert">
+    {{errorMessage}}
+  </div>
+  }
+
+  <!-- Section du profil -->
+  <div class="card profile-card">
+    <!-- En-tête du profil -->
+    <div class="card-header profile-header">
+      <h2 class="card-title mb-0">Informations du Profil</h2>
     </div>
-    }
-  
-    <!-- Section du profil -->
-    <div class="card shadow-lg">
-      <div class="card-header bg-success text-white">
-        <h2 class="card-title mb-0">Profile Information</h2>
-      </div>
-      <div class="card-body">
-        <div class="row">
-          <!-- Photo de profil (à gauche) -->
-          <div class="col-md-4 text-center">
-            <div class="profile-picture-container">
-              <img
-                src="https://picsum.photos/200/200"
-                alt="Profile Photo"
-                class="img-fluid rounded-circle profile-picture"
-              />
-            </div>
-            <h3 class="mt-3">{{profileInfo?.nom}} {{profileInfo?.prenom}}</h3>
-            <p class="text-muted">{{profileInfo?.role}}</p>
+
+    <!-- Corps du profil -->
+    <div class="card-body">
+      <div class="row">
+        <!-- Photo de profil (à gauche) -->
+        <div class="col-md-4 text-center">
+          <div class="mb-3">
+            <img
+              src="https://picsum.photos/200/200"
+              alt="Profile Photo"
+              class="img-fluid rounded-circle border border-4 border-white shadow"
+            />
           </div>
-  
-          <!-- Informations du profil (à droite) -->
-          <div class="col-md-8">
-            <div class="row mb-3">
-              <div class="col-md-6">
-                <div class="info-item">
-                  <strong>Nom:</strong>
-                  <p>{{profileInfo?.nom}}</p>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="info-item">
-                  <strong>Prénom:</strong>
-                  <p>{{profileInfo?.prenom}}</p>
-                </div>
+          <h3 class="mt-3 text-dark">{{profileInfo?.nom}} {{profileInfo?.prenom}}</h3>
+          <p style="color: wheat;">{{profileInfo?.role}}</p>
+        </div>
+
+        <!-- Informations du profil (à droite) -->
+        <div class="col-md-8">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <strong class="text-success">Nom:</strong>
+                <p class="text-dark">{{profileInfo?.nom}}</p>
               </div>
             </div>
-            <div class="row mb-3">
-              <div class="col-md-6">
-                <div class="info-item">
-                  <strong>Email:</strong>
-                  <p>{{profileInfo?.email}}</p>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <strong class="text-success">Prénom:</strong>
+                <p class="text-dark">{{profileInfo?.prenom}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <strong class="text-success">Email:</strong>
+                <p class="text-dark">{{profileInfo?.email}}</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <strong class="text-success">Téléphone:</strong>
+                <p class="text-dark">{{profileInfo?.tel}}</p>
+              </div>
+            </div>
+            @if(profileInfo?.role=="Manager"){
+              <div class="col-md-10">
+                <div class="mb-3">
+                  <strong class="text-success">Responsable du Département:</strong>
+                  <p class="text-dark">{{profileInfo?.departement.nomDep}}</p>
                 </div>
               </div>
-              <div class="col-md-6">
-                <div class="info-item">
-                  <strong>Téléphone:</strong>
-                  <p>{{profileInfo?.tel}}</p>
-                </div>
+            }
+            @if(profileInfo?.role=="User"){
+            <div class="col-md-6">
+              <div class="mb-3">
+                <strong class="text-success">Département:</strong>
+                <p class="text-dark">{{profileInfo?.departement.nomDep}}</p>
               </div>
             </div>
-            <div class="row mb-3">
-              <div class="col-md-6">
-              </div>
-              <div class="col-md-6">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <strong class="text-success">Poste:</strong>
+                <p class="text-dark">{{profileInfo?.poste}}</p>
               </div>
             </div>
-            <div class="text-end">
-             <!---<button class="btn btn-primary" (click)="updateProfile()">
-                <i class="fas fa-edit"></i> Modifier le profil
-              </button>-->
+            <div class="col-md-6">
+              <div class="mb-3">
+                <strong class="text-success">Date Embauche:</strong>
+                <p class="text-dark">{{profileInfo?.dateEmbauche}}</p>
+              </div>
             </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <strong class="text-success">Solde Congé:</strong>
+                <p class="text-dark">{{ profileInfo?.soldeRestant }}</p>
+              </div>
+            </div>
+          }
+          </div>
+          <div class="text-end">
+            <!-- Bouton pour modifier le profil (optionnel) -->
+            <!-- <button class="btn btn-success" (click)="updateProfile()">
+              <i class="fas fa-edit"></i> Modifier le profil
+            </button> -->
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>

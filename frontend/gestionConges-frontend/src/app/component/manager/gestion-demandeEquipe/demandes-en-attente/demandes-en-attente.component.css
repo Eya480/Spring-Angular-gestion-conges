@@ -1,0 +1,8 @@
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .hi{
+    background-color: rgba(248, 197, 184, 0.548);
+  }

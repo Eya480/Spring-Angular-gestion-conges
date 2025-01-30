@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {RouterModule } from '@angular/router';
-import { ServiceService } from '../../auth/service.service';
+import { ServiceService } from '../service.service';
 
 @Component({
   selector: 'app-nav',
@@ -22,6 +22,7 @@ export class NavComponent {
       this.isAdminRH = this.authService.isAdminRH();
       this.isManager = this.authService.isManager();
       this.isUser = this.authService.isUser();
+      console.log(this.authService.isAdminRH());
   }
 
   logout():void{

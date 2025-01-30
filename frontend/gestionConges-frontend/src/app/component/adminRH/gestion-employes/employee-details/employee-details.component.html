@@ -1,0 +1,80 @@
+<div class="container mt-5">
+    <div class="row">
+      <div class="col-md-10 offset-md-1">
+        <div class="card shadow-sm">
+          <!-- En-tête de la carte avec l'image à gauche -->
+          <div class="card-header text-white d-flex align-items-center" style="background: linear-gradient(135deg, #1a3a1bd7, #2574fc4f);">
+            <!-- Image de profil -->
+            <img src="https://picsum.photos/80/80" alt="Photo de profil" class="rounded-circle shadow-sm me-3" style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #fff;">
+            <!-- Titre et bouton de retour -->
+            <div class="d-flex justify-content-between align-items-center w-100">
+              <h3 class="card-title mb-0">Détails de l'Employé <span class="text-black">{{ employee?.nom }} {{employee?.prenom}}</span></h3>
+              <a class="btn btn-light btn-sm fw-bold" [routerLink]="['/adminRH/employees']" style="border: 2px solid;">
+                <i class="bi bi-arrow-left me-1"></i> Retour
+              </a>
+            </div>
+          </div>
+  
+          <!-- Corps de la carte -->
+          <div class="card-body">
+            <!-- Grille pour les informations -->
+            <div class="row g-4">
+              <!-- Informations Personnelles -->
+              <div class="col-md-6">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5 class="card-title text-success">
+                      <i class="bi bi-person me-2"></i>Informations Personnelles
+                    </h5>
+                    <hr>
+                    <ul class="list-unstyled">
+                      <li class="mb-3">
+                        <strong><i class="bi bi-person-fill me-2"></i>Nom:</strong> {{ employee?.nom }}
+                      </li>
+                      <li class="mb-3">
+                        <strong><i class="bi bi-person-fill me-2"></i>Prénom:</strong> {{ employee?.prenom }}
+                      </li>
+                      <li class="mb-3">
+                        <strong><i class="bi bi-envelope me-2"></i>Email:</strong> {{ employee?.email }}
+                      </li>
+                      <li class="mb-3">
+                        <strong><i class="bi bi-calendar me-2"></i>Date d'Embauche:</strong> {{ employee?.dateEmbauche }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+  
+              <!-- Informations Professionnelles -->
+              <div class="col-md-6">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5 class="card-title text-success">
+                      <i class="bi bi-briefcase me-2"></i>Informations Professionnelles
+                    </h5>
+                    <hr>
+                    <ul class="list-unstyled">
+                      <li class="mb-3">
+                        <strong><i class="bi bi-building me-2"></i>Département:</strong> {{ employee?.departement?.nomDep || 'Non spécifié' }}
+                      </li>
+                      <li class="mb-3">
+                        <strong><i class="bi bi-person-workspace me-2"></i>Poste:</strong> {{ employee?.poste || 'Non spécifié' }}
+                      </li>
+                      <li class="mb-3">
+                        <strong><i class="bi bi-calendar-check me-2"></i>Solde Congé:</strong> {{ employee?.soldeRestant }} jours
+                      </li>
+                      <li class="mb-3">
+                        <strong><i class="bi bi-calendar-x me-2"></i>Jours Utilisés:</strong> {{ employee?.soldeConsommes }} jours
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+ 

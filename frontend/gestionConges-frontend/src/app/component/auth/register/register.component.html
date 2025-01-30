@@ -1,1 +1,199 @@
-<p>register works!</p>
+<div class="container py-5 h-50">
+    <div class="row d-flex justify-content-center align-items-center h-50">
+        <div class="col col-xl-10">
+            <div class="card shadow-lg" style="border-radius: 1rem; backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.8);">
+                <div class="row g-0">
+                    <!-- Image Section -->
+                    <div class="col-md-6 col-lg-5 d-none d-md-block">
+                        <img src="assets/register.jpg"
+                            alt="Formulaire d'inscription" 
+                            class="img-fluid" 
+                            style="border-radius: 1rem 0 0 1rem; object-fit: cover; height: 100%;filter:brightness(0.7) contrast(1.2) saturate(2);" />
+                    </div>
+
+                    <!-- Form Section -->
+                    <div class="col-md-7">
+                        <div class="card-body p-5 d-flex flex-column justify-content-center">
+                            <h2 class="text-center fw-bold mb-4">Créer un compte</h2>
+                            <p class="text-center text-muted mb-4">
+                                Inscrivez-vous pour rejoindre notre plateforme
+                            </p>
+                            <!-- Success Message -->
+                            @if (successMessage) {
+                                <div class="alert alert-success mt-3">
+                                    {{ successMessage }}
+                                </div>
+                            }
+                            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+                                <!-- Nom Input -->
+                                <div class="form-floating mb-3">
+                                    <input 
+                                        type="text" 
+                                        id="nomInput" 
+                                        formControlName="nom" 
+                                        class="form-control" 
+                                        placeholder="Nom" 
+                                        required
+                                    >
+                                    <label for="nomInput">*Nom</label>
+                                    @if(registerForm.controls['nom'].touched && registerForm.controls['nom'].invalid){
+                                        <span class="error">Ce champ est obligatoire!</span>
+                                    }
+                                </div>
+
+                                <!-- Prénom Input -->
+                                <div class="form-floating mb-3">
+                                    <input 
+                                        type="text" 
+                                        id="prenomInput" 
+                                        formControlName="prenom" 
+                                        class="form-control" 
+                                        placeholder="Prénom" 
+                                        required
+                                    >
+                                    <label for="prenomInput">*Prénom</label>
+                                    @if(registerForm.controls['prenom'].touched && registerForm.controls['prenom'].invalid){
+                                        <span class="error">Ce champ est obligatoire!</span>
+                                    }
+                                </div>
+
+                                <!-- Email Input -->
+                                <div class="form-floating mb-3">
+                                    <input 
+                                        type="email" 
+                                        id="emailInput" 
+                                        formControlName="email" 
+                                        class="form-control" 
+                                        placeholder="Adresse e-mail" 
+                                        required
+                                        title="Please enter a valid email address"
+                                    >
+                                    <label for="emailInput">*Adresse e-mail</label>
+                                    @if(registerForm.controls['email'].touched && registerForm.controls['email'].invalid){
+                                        <span class="error">Ce champ est obligatoire!</span>
+                                    }
+                                </div>
+
+                                <!-- CIN Input -->
+                                <div class="form-floating mb-3">
+                                    <input 
+                                        type="text" 
+                                        id="cinInput" 
+                                        formControlName="CIN" 
+                                        class="form-control" 
+                                        placeholder="Numéro CIN" 
+                                    >
+                                    <label for="cinInput">*Numéro CIN</label>
+                                </div>
+
+                                <!-- Tel Input -->
+                                <div class="form-floating mb-3">
+                                    <input 
+                                        type="text" 
+                                        id="telInput" 
+                                        formControlName="tel" 
+                                        class="form-control" 
+                                        placeholder="Tel" 
+                                        required
+                                    >
+                                    <label for="telInput">*Numéro de téléphone</label>
+                                    @if(registerForm.controls['tel'].touched && registerForm.controls['tel'].invalid){
+                                        <span class="error">Ce champ est obligatoire!</span>
+                                    }
+                                </div>
+
+                                <!-- Department Input -->
+                                <div class="form-floating mb-3">
+                                    <select
+                                        id="departementSelect"
+                                        formControlName="nomDep"
+                                        class="form-select"
+                                        required
+                                    >
+                                        <option value="" disabled selected>Choisir un département</option>
+                                        @for(dep of departements ; track dep){
+                                        <option [value]="dep">{{ dep }}</option>}
+                                    </select>
+                                    <label for="departementSelect">*Département</label>
+                                </div>
+                                <!-- Date Embauche Input -->
+                                <div class="form-floating mb-3">
+                                    <input 
+                                        type="date" 
+                                        id="dateEmbaucheInput" 
+                                        formControlName="dateEmbauche" 
+                                        class="form-control" 
+                                        placeholder="Date Embauche" 
+                                        required
+                                    >
+                                    <label for="dateEmbaucheInput">*Date Embauche</label>
+                                    @if(registerForm.controls['dateEmbauche'].touched && registerForm.controls['dateEmbauche'].invalid){
+                                        <span class="error">Ce champ est obligatoire!</span>
+                                    }
+                                </div>
+                                <input type="text" name="" id="" formControlName="role" style="display: none;">
+
+                                <!-- Poste Input -->
+                              <div class="form-floating mb-3">
+                             <select
+                             id="posteSelect"
+                             formControlName="poste"
+                              class="form-select"
+                                required
+                                    >
+                               <option value="" disabled selected>Choisir un poste</option>
+                                  <!-- Liste statique des postes -->
+                                   @for(poste of postes;track poste){
+                                <option [value]="poste">{{ poste }}</option>}
+                                  </select>
+                                  <label for="posteSelect">*Poste</label>
+                                  @if(registerForm.controls['poste'].touched && registerForm.controls['poste'].invalid){
+                                <span class="error">Ce champ est obligatoire!</span>}
+                                </div>
+  
+                                <!-- Mot de Passe Input -->
+                                <div class="form-floating mb-3">
+                                    <input 
+                                        type="password" 
+                                        id="passwordInput" 
+                                        formControlName="pwd" 
+                                        class="form-control" 
+                                        placeholder="Mot de passe" 
+                                        required
+                                    >
+                                    <label for="passwordInput">*Mot de passe</label>
+                                    @if(registerForm.controls['pwd'].touched && registerForm.controls['pwd'].invalid){
+                                        <span class="error">Ce champ est obligatoire!</span>
+                                    }
+                                </div>
+                                <input type="text" formControlName="role" style="display: none;" name="role">
+
+                                <!-- Error Message -->
+                                @if (errorMessage){
+                                    <div class="alert alert-danger mt-3" [innerHTML]="errorMessage">
+                                        {{ errorMessage }}
+                                    </div>
+                                }
+
+                                <!-- Register Button -->
+                                <div class="d-grid mb-4">
+                                    <button type="submit" class="btn btn-primary btn-lg" [disabled]="registerForm.invalid">
+                                        S'inscrire
+                                    </button>
+                                </div>
+
+                                <!-- Login Link -->
+                                <p class="text-center">
+                                    <span>Vous avez déjà un compte ?</span>
+                                    <a routerLink="/login" class="text-decoration-none text-primary fw-bold">
+                                        Connectez-vous ici
+                                    </a>
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -19,7 +19,6 @@
                                 <p class="text-center text-muted mb-4">
                                     Connectez-vous pour accéder à votre compte
                                 </p>
-
                                 <form [formGroup]="login"  (ngSubmit)="loginUser(login)">
                                     <!-- Email Input -->
                                     <div class="form-floating mb-3">
@@ -69,7 +68,7 @@
                                     <!-- Register Link -->
                                     <p class="text-center">
                                         <span>Vous n'avez pas de compte ?</span>
-                                        <a href="public/register" class="text-decoration-none text-success fw-bold">
+                                        <a routerLink="/register" class="text-decoration-none text-success fw-bold">
                                             Inscrivez-vous ici
                                         </a>
                                     </p>

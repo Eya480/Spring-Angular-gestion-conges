@@ -1,0 +1,141 @@
+<div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-xl-10">
+        <div class="card shadow-lg" style="border-radius: 1rem; backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.8);">
+          <div class="row g-0">
+            <!-- Image Section -->
+            <div class="col-md-6 col-lg-5 d-none d-md-block">
+              <img src="/assets/ajouter.jpg"
+                   alt="Formulaire d'employé"
+                   class="img-fluid"
+                   style="height: 100%;" />
+            </div>
+  
+            <!-- Form Section -->
+            <div class="col-md-7">
+              <div class="card-body p-5 d-flex flex-column justify-content-center">
+                <h2 class="text-center fw-bold mb-4">Ajouter un Employé</h2>
+  
+                <form [formGroup]="AddEmployeeForm" (ngSubmit)="onSubmit()">
+                  <!-- CIN -->
+                  <div class="form-floating mb-3">
+                    <input type="text" id="cinInput" formControlName="cin" class="form-control" placeholder="CIN" required>
+                    <label for="cinInput">CIN</label>
+                    @if(AddEmployeeForm.controls['cin'].touched && AddEmployeeForm.controls['cin'].invalid){
+                      <span class="error">Ce champ est obligatoire!</span>
+                    }
+                  </div>
+  
+                  <!-- Nom -->
+                  <div class="form-floating mb-3">
+                    <input type="text" id="nomInput" formControlName="nom" class="form-control" placeholder="Nom" required>
+                    <label for="nomInput">*Nom</label>
+                    @if(AddEmployeeForm.controls['nom'].touched && AddEmployeeForm.controls['nom'].invalid){
+                      <span class="error">Ce champ est obligatoire!</span>
+                    }
+                  </div>
+  
+                  <!-- Prénom -->
+                  <div class="form-floating mb-3">
+                    <input type="text" id="prenomInput" formControlName="prenom" class="form-control" placeholder="Prénom" required>
+                    <label for="prenomInput">*Prénom</label>
+                    @if(AddEmployeeForm.controls['prenom'].touched && AddEmployeeForm.controls['prenom'].invalid){
+                      <span class="error">Ce champ est obligatoire!</span>
+                    }
+                  </div>
+  
+                  <!-- Téléphone -->
+                  <div class="form-floating mb-3">
+                    <input type="tel" id="telInput" formControlName="tel" class="form-control" placeholder="Téléphone" required>
+                    <label for="telInput">*Téléphone</label>
+                    @if(AddEmployeeForm.controls['tel'].touched && AddEmployeeForm.controls['tel'].invalid){
+                      <span class="error">Ce champ est obligatoire!</span>
+                    }
+                  </div>
+  
+                  <!-- Email -->
+                  <div class="form-floating mb-3">
+                    <input type="email" id="emailInput" formControlName="email" class="form-control" placeholder="Email" required>
+                    <label for="emailInput">*Email</label>
+                    @if(AddEmployeeForm.controls['email'].touched && AddEmployeeForm.controls['email'].invalid){
+                      <span class="error">Ce champ est obligatoire!</span>
+                    }
+                  </div>
+  
+                  <!-- Mot de passe -->
+                  <div class="form-floating mb-3">
+                    <input type="password" id="pwdInput" formControlName="pwd" class="form-control" placeholder="Mot de Passe" required>
+                    <label for="pwdInput">*Mot de Passe</label>
+                    @if(AddEmployeeForm.controls['pwd'].touched && AddEmployeeForm.controls['pwd'].invalid){
+                      <span class="error">Ce champ est obligatoire!</span>
+                    }
+                  </div>
+
+                  <div class="form-floating mb-3">
+                    <select
+                    id="posteSelect"
+                    formControlName="poste"
+                     class="form-select"
+                       required
+                           >
+                         <!-- Liste statique des postes -->
+                          @for(poste of postes;track poste){
+                       <option [value]="poste">{{ poste }}</option>}
+                         </select>
+                         <label for="posteSelect">*Poste</label>
+                         @if(AddEmployeeForm.controls['poste'].touched && AddEmployeeForm.controls['poste'].invalid){
+                       <span class="error">Ce champ est obligatoire!</span>}
+                       </div>
+  
+                  <!-- Department Input -->
+                  <div class="form-floating mb-3">
+                    <select
+                        id="departementSelect"
+                        formControlName="nomDep"
+                        class="form-select"
+                        required
+                    >
+                        <option value="" disabled selected>Choisir un département</option>
+                        @for(dep of departements ; track dep){
+                        <option [value]="dep">{{ dep }}</option>}
+                    </select>
+                    <label for="departementSelect">*Département</label>
+                </div>
+                <!-- Date Embauche Input -->
+                <div class="form-floating mb-3">
+                    <input 
+                        type="date" 
+                        id="dateEmbaucheInput" 
+                        formControlName="dateEmbauche" 
+                        class="form-control" 
+                        placeholder="Date Embauche" 
+                        required
+                    >
+                    <label for="dateEmbaucheInput">*Date Embauche</label>
+                    @if(AddEmployeeForm.controls['dateEmbauche'].touched && AddEmployeeForm.controls['dateEmbauche'].invalid){
+                        <span class="error">Ce champ est obligatoire!</span>
+                    }
+                </div>
+                <input type="text" name="" id="" formControlName="role" style="display: none;">              
+  
+                  <!-- Error Message -->
+                  @if(errorMessage){
+                  <div class="alert alert-danger mt-3">
+                    {{ errorMessage }}
+                  </div>}
+  
+                  <!-- Submit Button -->
+                  <div class="d-grid mb-4">
+                    <button type="submit" class="btn btn-primary btn-lg" [disabled]="AddEmployeeForm.invalid">
+                      Ajouter
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -1,6 +1,6 @@
-import { CanActivateFn, Router } from '@angular/router';
+import { CanActivate, CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
-import { ServiceService } from '../auth/service.service';
+import { ServiceService } from '../shared/service.service';
 
 export const guardGuard: CanActivateFn = (route, state) => {
   const authService = inject(ServiceService);
@@ -55,4 +55,14 @@ export const adminRHGuard: CanActivateFn = (route, state) => {
     return false;  // Deny access
   }
 };
+export const unauthenticatedGuard: CanActivateFn = (route, state) => {
+  const authService = inject(ServiceService);
+  const router = inject(Router);
 
+  if (authService.isAuthenticated()) {
+    return false;
+  } else {
+    // If the user is not authenticated, allow access to the register page
+    return true;
+  }
+};

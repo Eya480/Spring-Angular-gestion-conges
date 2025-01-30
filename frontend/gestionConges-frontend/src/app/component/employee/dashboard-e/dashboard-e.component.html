@@ -1,1 +1,63 @@
-<p>dashboard-e works!</p>
+<div class="container mt-4">
+    <div class="row">
+      <!-- Solde de congés -->
+      <div class="col-md-4 mb-4">
+        <div class="card custom-card text-white"  style="background-color: rgb(219, 161, 86);">
+          <div class="card-body">
+            <h5 class="card-title">Mon solde de congés</h5>
+            <p class="card-text display-4">{{ employee.soldeRestant }}</p>
+          </div>
+        </div>
+      </div>
+      <!-- Demandé en attente -->
+      <div class="col-md-4 mb-4">
+        <div class="card custom-card text-white" style="background-color: rgb(219, 184, 86);">
+          <div class="card-body">
+            <h5 class="card-title">Demandes en attente</h5>
+            <p class="card-text display-4 text-black">{{ demandesEnAttente }}</p>
+          </div>
+        </div>
+      </div>
+      <!-- Demandé approuvé -->
+      <div class="col-md-4 mb-4">
+        <div class="card custom-card text-white"  style="background-color: rgb(196, 156, 97);">
+          <div class="card-body">
+            <h5 class="card-title">Demandes approuvées</h5>
+            <p class="card-text display-4 text-black">{{ demandesApprouvees }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Tableau des demandes -->
+    <div class="card mt-3">
+      <div class="card-header custom-card-header text-black fw-bold">Mes demandes de congé</div>
+      <div class="card-body">
+        <table class="table table-hover" style="border: 1px solid GREY;">
+          <thead>
+            <tr>
+              <th>Date début</th>
+              <th>Date fin</th>
+              <th>Type</th>
+              <th>Statut</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let demande of demandeConges">
+              <td>{{ demande.dateDebut }}</td>
+              <td>{{ demande.dateFin }}</td>
+              <td>{{ demande.typeConge.nomTypeConge }}</td>
+              <td>
+                <span class="badge" [ngClass]="{
+                  'bg-warning': demande.statut === 'En_Attente',
+                  'bg-success': demande.statut === 'Approuve',
+                  'bg-danger': demande.statut === 'Refuse'
+                }">{{demande.statut === 'En_Attente' ? 'En Attente' : 'Approuvée'}}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  

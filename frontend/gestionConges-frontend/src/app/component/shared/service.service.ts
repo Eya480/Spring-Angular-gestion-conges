@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient,HttpHandler, HttpHeaders } from '@angular/common/http'; // <-- Import HttpClient
+import { HttpClient, HttpHeaders } from '@angular/common/http'; // <-- Import HttpClient
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 })
 export class ServiceService {
   private url="http://localhost:8080";
+
   constructor(private http: HttpClient,private router: Router) { }
   login(email: string, password: string): Observable<any> {
     const url = `${this.url}/auth/login`;
@@ -15,16 +16,9 @@ export class ServiceService {
     return this.http.post(url, body);
   }
 
-  register(userData: any, token: string): Observable<any> {
+  register(userData: any): Observable<any> {
     const url = `${this.url}/auth/register`;
-
-    // Create the headers with the Authorization Bearer token
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-
-    // Send the POST request with userData as the body and headers
-    return this.http.post<any>(url, userData, { headers });
+    return this.http.post<any>(url, userData); 
   }
 
   getProfile(token: string): Observable<any> {
@@ -32,6 +26,7 @@ export class ServiceService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
+    //console.log("Token:", token);  // Log token to verify it's set correctly
   
     return this.http.get<any>(url, { headers });
   }
@@ -58,7 +53,7 @@ export class ServiceService {
 isAdmin(): boolean {
   if (typeof localStorage !== 'undefined') {
     const role = localStorage.getItem('role');
-    return role === 'ADMIN';
+    return role === 'Admin';
   }
   return false;
 }
@@ -67,7 +62,7 @@ isAdmin(): boolean {
 isManager(): boolean {
   if (typeof localStorage !== 'undefined') {
     const role = localStorage.getItem('role');
-    return role === 'MANAGER';
+    return role === 'Manager';
   }
   return false;
 }
@@ -76,7 +71,7 @@ isManager(): boolean {
 isUser(): boolean {
   if (typeof localStorage !== 'undefined') {
     const role = localStorage.getItem('role');
-    return role === 'USER';
+    return role === 'User';
   }
   return false;
 }
@@ -85,9 +80,21 @@ isUser(): boolean {
 isAdminRH(): boolean {
   if (typeof localStorage !== 'undefined') {
     const role = localStorage.getItem('role');
-    return role === 'ADMINRH';
+    return role === 'AdminRH';
   }
   return false;
+}
+updateUser(userId: string, userData: any, token: string): Observable<any> {
+  const url = `${this.url}/admin/update/${userId}`;
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`
+  });
+
+  return this.http.put<any>(url, userData, { headers });
+}
+//departement service is here
+getAllDepartements(): Observable<any[]> {
+  return this.http.get<any[]>(`${this.url}/api/departements/get-all`);
 }
 
 

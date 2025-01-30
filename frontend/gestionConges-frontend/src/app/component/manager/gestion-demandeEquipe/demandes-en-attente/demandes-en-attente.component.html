@@ -1,0 +1,101 @@
+<div class="container mt-5">
+    <div class="d-flex">
+      <!-- Sidebar: Filter Section -->
+      <div class="flex-shrink-0 me-4" style="width: 250px; border-right: 1px solid gray; padding: 10px;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2>Filter</h2>
+        </div>
+  
+        <!-- Filtre -->
+        <div class="mb-4">
+            <label for="filter" class="mb-2 mb-md-3">Filter par Poste</label>
+            <select class="form-select" [(ngModel)]="poste">
+              <option value="all">Tous les Postes</option>
+              @for (posteEmp of postes; track posteEmp) {
+                <option [ngValue]="posteEmp">{{ posteEmp }}</option>
+              }
+            </select>
+            <!-- Filter Button -->
+            <div class="d-flex justify-content-end justify-content-lg-start">
+              <button class="btn btn-success mt-3 mt-md-4" type="button" (click)="filter()">Filter</button>
+              <button class="btn btn-outline-success mt-3 mt-md-4 ms-3" type="button" (click)="resetFilter()">Reset</button>    
+          </div>
+          </div>
+        </div>
+  
+      <!-- Main Content: List of Requests -->
+      <div class="flex-grow-1">
+        <div class="d-flex align-items-center">
+          <h3 class="text-black fw-bold">Liste des Demandes de Congés <strong style="margin-right: 10px;">En Attente</strong>  <i class="bi bi-clock"></i> </h3>
+        </div>
+        <br><br>
+  
+        <!-- Display Requests -->
+        <div class="row">
+            @for(demande of LesDemandes;track demande){
+          <div class="col-md-4 mb-4 d-flex">
+            
+            <div
+              class="card employee-card w-100 h-100" [ngClass]="{'hi': demande.estDExtension === true}"
+              style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px;"
+            >
+            @if(demande.estDExtension==true){
+            <span class=" fw-bold text-center" style="color: rgb(223, 46, 46);"><i class="bi bi-arrow-right-circle"></i>
+
+              Demande d'Extension</span>}
+              <div class="card-body text-center position-relative p-3 d-flex flex-column">
+                <!-- Profile Picture -->
+                <img
+                  src="https://picsum.photos/100/100/?{{demande.idDemande}}"
+                  alt="Photo de profil"
+                  class="rounded-circle mb-2 mx-auto"
+                  style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #ddd;"
+                />
+  
+                <!-- Employee Info -->
+                <h4 class="h6" class="badge bg-black text-white me-1">Demade de {{ demande.typeConge.nomTypeConge }}</h4>
+                <h5 class="h6">{{ demande.employe.nom }} {{ demande.employe.prenom }}</h5>
+                <p class="small">
+                  Dept. <strong>{{ demande.employe.departement.nomDep || 'Non spécifié' }}</strong>
+                </p>
+                <p class="text-muted small fw-bold">{{ demande.employe.poste || 'Non spécifié' }}</p>
+                <p class="small">
+                    {{ demande.dateDebut }} <strong>to</strong> {{ demande.dateFin }}
+                    <span class="badge text-white me-1" style="background-color: #e69437; text-shadow: 1px 1px 2px black;">
+                      {{ demande.nbJours }} jours souhaités
+                    </span>
+                  </p>
+                  @if(demande.employe.reason){
+                <p class="text-muted small">Raison : {{ demande.employe.reason }}</p>
+                  }
+                <!-- Action Buttons -->
+                <div class="text-center mt-auto">
+                  <button style="background-color: #5fb426"
+                    class="btn btn-success btn-sm me-2"
+                    (click)="approuverDemande(demande.idDemande)"
+                  >
+                    Approuver
+                  </button>
+                  <button style="background-color: #ee8128"
+                    class="btn btn-danger btn-sm"
+                    (click)="refuserDemande(demande.idDemande)"
+                  >
+                    Refuser
+                  </button>
+                </div>
+              </div>
+           
+            </div>
+          </div>
+        }
+          <!-- No Requests Found -->
+           @if(!LesDemandes || LesDemandes.length === 0){
+          <div class="col-12 text-center text-muted">
+            Aucune Demande trouvée pour votre équipe pour le moment
+          </div>
+        }
+        </div>
+      </div>
+    </div>
+  </div>
+  

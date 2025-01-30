@@ -1,1 +1,65 @@
-<p>dashboard-m works!</p>
+<div class="container mt-4">
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="card custom-card bg-success text-white">
+          <div class="card-body">
+            <h5 class="card-title">Demandes à approuver</h5>
+            <p class="card-text display-4 text-black">{{ demandesEnAttente?.length }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card custom-card bg-warning text-dark">
+          <div class="card-body">
+            <h5 class="card-title">Nombre d'employés</h5>
+            <p class="card-text display-4">{{ nbEmployes }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card custom-card bg-info text-white">
+          <div class="card-body">
+            <h5 class="card-title">Demandes d'extension</h5>
+            <p class="card-text display-4 text-black">{{ nbDextension }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Tableau des demandes -->
+    <div class="card mt-3">
+      <div class="card-header custom-card-header text-black fw-bold">Demandes de congé en attente</div>
+      <div class="card-body">
+        <table class="table table-striped" style="border: 1px solid GREY;">
+          <thead>
+            <tr>
+              <th>Nom de l'employé</th>
+              <th>Date début</th>
+              <th>Date fin</th>
+              <th>Type</th>
+              <th>Statut</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for(demande of demandeConges;track demande){
+            <tr>
+              <td>{{ demande.employe?.nom }} {{ demande.employe?.prenom }}</td>
+              <td>{{ demande.dateDebut }}</td>
+              <td>{{ demande.dateFin }}</td>
+              <td>{{ demande.typeConge.nomTypeConge }}</td>
+              <td>
+                <span class="badge" [ngClass]="{'bg-warning': demande.statut === 'En_Attente', 'bg-success': demande.statut === 'Approuve'}">
+                  {{ demande.statut === 'En_Attente' ? 'En Attente' : 'Approuvée' }}
+                </span>
+                @if(demande.estDExtension==true){
+                    <span class="text-danger fw-bold text-center" style="margin-left: 30px;"><i class="bi bi-megaphone-fill"></i>
+                      Demande d'Extension</span>}
+              </td>
+            </tr>
+        }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,41 @@
+<div class="container py-5" style="margin-bottom: 100px;">
+    <div class="row justify-content-center">
+      <div class="col-md-5">
+        <div class="card shadow-lg" style="border-radius: 1rem; backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.8);">
+          <div class="card-body p-4">
+            <h2 class="text-center fw-bold mb-3">Ajouter un Département</h2>
+  
+            <form [formGroup]="AddDepForm" (ngSubmit)="onSubmit()">
+              <!-- CIN -->
+              <div class="form-floating mb-3">
+                <input type="text" id="nomDepInput" formControlName="nomDep" class="form-control" placeholder="Le Nom de Département" required>
+                <label for="nomDep">*Le Nom de Département</label>
+                @if(AddDepForm.controls['nomDep'].touched && AddDepForm.controls['nomDep'].invalid){
+                  <span class="error">Ce champ est obligatoire!</span>
+                }
+              </div>
+  
+              <!-- Description -->
+              <div class="form-floating mb-3">
+                <input type="text" id="description" formControlName="description" class="form-control" placeholder="Description" required>
+                <label for="description">Description</label>
+              </div>
+  
+              <!-- Messages d'erreur et de succès -->
+              @if(errorMessage){
+                <div class="alert alert-danger mt-2">
+                  {{ errorMessage }}
+                </div>
+              }
+              <!-- Bouton de soumission -->
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary" [disabled]="AddDepForm.invalid">
+                  Ajouter
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

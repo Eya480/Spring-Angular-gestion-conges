@@ -1,0 +1,109 @@
+<div class="container mt-5" style="max-width: 100%; width: 95%;">
+  <!-- Header Section -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-secondary fw-bold">Liste des Demandes Congés</h2>
+    <a class="btn shadow-sm text-white d-flex align-items-center" [routerLink]="'../addDemande'"
+           style="background-color: rgb(29, 138, 29); border-radius: 25px; padding: 8px 20px; font-size: 14px; transition: all 0.3s ease;">
+          Ajouter un(e) Demande
+        </a>
+  </div>
+
+  <!-- Filter Section -->
+  <div class="card p-2 mb-4 shadow-sm">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex flex-column w-50">
+        <label for="filter" class="mb-2 fw-bold" style="font-size: 14px; color: #555;">Filtrer par Type Congé</label>
+        <select class="form-select form-control-lg" [(ngModel)]="type" style="height: 40px; font-size: 16px; border: 2px solid #ccc;">
+          <option value="all">Tous les Types Congés</option>
+          @for(typeC of typeConges;track typeC){
+          <option [ngValue]="typeC.nomTypeConge">
+            {{ typeC.nomTypeConge }}
+          </option>
+        }
+        </select>
+      </div>
+
+      <div class="d-flex justify-content-center align-items-center">
+        <!-- Filter Button -->
+        <button class="btn btn-success btn-lg ms-2" type="button" (click)="filter()" style="font-size: 16px; padding: 10px 25px;background-color: rgb(8, 68, 8);">
+          <i class="bi bi-funnel"></i> Filtrer
+        </button>
+        <!-- Reset Button -->
+        <button class="btn btn-outline-secondary btn-lg ms-2" type="button" (click)="resetFilter()" style="font-size: 16px; padding: 10px 25px;">
+          Réinitialiser
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Messages d'erreur -->
+   @if(errorMessage){
+  <div class="alert alert-danger mt-3">
+    {{ errorMessage }}
+  </div>}
+
+  <!-- Table Section -->
+  <div class="card shadow-sm">
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">Type de Congé</th>
+          <th scope="col">Date de Début</th>
+          <th scope="col">Date de Fin</th>
+          <th scope="col">Statut</th>
+          <th scope="col">Raison</th>
+          <th scope="col" class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let demande of demandeConges">
+          <td>{{ demande.typeConge.nomTypeConge }}</td>
+          <td>{{ demande.dateDebut }}</td>
+          <td>{{ demande.dateFin }}</td>
+          <td>
+            <span class="badge" [ngClass]="{
+                'bg-success': demande.statut === 'Approuve', 
+                'bg-danger': demande.statut === 'Refuse', 
+                'bg-warning': demande.statut === 'En_Attente'
+              }">
+              {{demande.statut === 'En_Attente' ? 'En Attente' : 'Approuvée'}}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-link btn-sm text-decoration-none toggle-reason" (click)="toggleRaison(demande.idDemande)">
+              {{ demande.showRaison ? 'Masquer la Raison' : 'Afficher la Raison' }}
+            </button>
+            <p *ngIf="demande.showRaison" class="reason-text">
+              <strong>Raison :</strong> {{ demande.reason }}
+            </p>
+          </td>
+          <td class="text-center">
+            <a class="btn btn-outline-success btn-sm ms-2"
+              [routerLink]="['../', 'editDemande', demande.idDemande]"
+              [ngClass]="{ 'disabled': demande.statut == 'Approuve' || demande.statut == 'Refuse'}"
+              [attr.tabindex]="demande.statut == 'Approuve' || demande.statut == 'Refuse' ? -1 : null"
+              (click)="$event.preventDefault()">
+              <i class="bi bi-pencil-square"></i> 
+            </a>
+            <button class="btn btn-outline-danger btn-sm ms-2" (click)="deleteDemande(demande.idDemande)" 
+              [disabled]="demande.statut=='Approuve' || demande.statut=='Refuse'">
+              <i class="bi bi-trash"></i>
+            </button>
+            <a class="btn btn-primary btn-sm ms-2"
+              [routerLink]="['../', 'demandeExtension', demande.idDemande]"
+              [ngClass]="{ 'disabled': demande.statut != 'Approuve' }"
+              [attr.tabindex]="demande.statut == 'En_Attente' ? -1 : null"
+              (click)="$event.preventDefault()">
+              <i class="bi bi-calendar-plus"></i> Extension
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- No Data Found -->
+  <div *ngIf="!demandeConges || demandeConges.length === 0" class="text-center text-muted">
+    Aucune Demande de Congé trouvée
+  </div>
+</div>

@@ -1,0 +1,102 @@
+<div class="container py-4" style="margin-bottom: 80px;">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card shadow-sm border-0" style="border-radius: 1rem; backdrop-filter: blur(10px); background: rgba(240, 240, 240, 0.95);">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-start mb-3">
+              <a class="btn btn-outline-secondary btn-sm px-3" [routerLink]="['/employee/demandeConges']">
+                <i class="bi bi-arrow-left me-1"></i> Retour
+              </a>
+            </div>
+            <h4 class="text-center fw-bold mb-3 text-success">Demander un Congé</h4>
+  
+            <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+              <!-- Ligne contenant deux champs -->
+              <div class="row g-3 mb-3">
+                <!-- Date de début -->
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input
+                      type="date"
+                      id="dateDebut"
+                      name="dateDebut"
+                      [(ngModel)]="demandeConge.dateDebut"
+                      class="form-control shadow-sm"
+                      placeholder="Date Début"
+                      required
+                      #dateDebut="ngModel"
+                    />
+                    <label for="dateDebut">*Date de début</label>
+                    <small *ngIf="dateDebut.touched && dateDebut.invalid" class="text-danger">Obligatoire</small>
+                  </div>
+                </div>
+  
+                <!-- Date de fin -->
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input
+                      type="date"
+                      id="dateFin"
+                      name="dateFin"
+                      [(ngModel)]="demandeConge.dateFin"
+                      class="form-control shadow-sm"
+                      placeholder="Date Fin"
+                      required
+                      #dateFin="ngModel"
+                    />
+                    <label for="dateFin">*Date de fin</label>
+                    <small *ngIf="dateFin.touched && dateFin.invalid" class="text-danger">Obligatoire</small>
+                  </div>
+                </div>
+              </div>
+  
+              <!-- Type de congé -->
+              <div class="form-floating mb-3">
+                <select
+                  name="typeConge"
+                  [(ngModel)]="demandeConge.typeConge.nomTypeConge"
+                  class="form-select shadow-sm"
+                  required
+                  #typeConge="ngModel"
+                >
+                  <option value="" disabled selected>Choisir un Type Congé</option>
+                  <option *ngFor="let type of typeConges" [value]="type.nomTypeConge">{{ type.nomTypeConge }}</option>
+                </select>
+                <label for="nomTypeConge">*Type Congé</label>
+                <small *ngIf="typeConge.touched && typeConge.invalid" class="text-danger">Obligatoire</small>
+              </div>
+  
+              <!-- Raison -->
+              <div class="form-floating mb-3">
+                <textarea
+                  id="reason"
+                  name="reason"
+                  [(ngModel)]="demandeConge.reason"
+                  class="form-control shadow-sm"
+                  placeholder="Raison"
+                  required
+                  style="height: 100px;"
+                  #reason="ngModel"
+                ></textarea>
+                <label for="reason">*Raison</label>
+                <small *ngIf="reason.touched && reason.invalid" class="text-danger">Obligatoire</small>
+              </div>
+  
+              <!-- Messages d'erreur -->
+              <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+                {{ errorMessage }}
+              </div>
+  
+              <!-- Bouton de soumission -->
+              <div class="d-grid mt-3">
+                <button type="submit" class="btn btn-success btn-sm shadow-sm" [disabled]="f.invalid">
+                  <i class="bi bi-send me-1"></i> Sauvegarder
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
