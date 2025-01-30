@@ -1,5 +1,6 @@
 package com.gestionConges.backend.gestionConges.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,10 +19,14 @@ public class Rapport {
     private int annee;
 
     private LocalDateTime dateGeneration;
+
     @ManyToOne
     @JoinColumn(name = "departement_id")
+    @JsonIgnore
     private Departement departement;
+
     @ManyToOne
     @JoinColumn(name = "adminRH_id")
+    @JsonIgnore
     private AdminRH adminRH; // Un rapport est géré par un AdminRH
 }

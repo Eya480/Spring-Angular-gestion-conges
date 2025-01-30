@@ -1,8 +1,9 @@
 package com.gestionConges.backend.gestionConges.service;
 
 import com.gestionConges.backend.gestionConges.dto.ReqRes;
-import com.gestionConges.backend.gestionConges.model.Personnel;
-import com.gestionConges.backend.gestionConges.repository.PersonnelRepo;
+import com.gestionConges.backend.gestionConges.model.*;
+import com.gestionConges.backend.gestionConges.repository.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -21,6 +22,21 @@ public class PersonnelManagementService {
     private PersonnelRepo personnelRepo;
 
     @Autowired
+    private ManagerRepo managerRepo;
+
+    @Autowired
+    private EmployeeRepo employeeRepo;
+
+    @Autowired
+    private AdminRHRepo adminRHRepo;
+
+    @Autowired
+    private AdminRepo adminRepo;
+
+    @Autowired
+    private DepartementRepo departementRepo;
+
+    @Autowired
     private JWTUtils jwtUtils;
 
     @Autowired
@@ -29,32 +45,93 @@ public class PersonnelManagementService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private EmployeService employeService;
+
     public ReqRes register(ReqRes registrationRequest) {
         ReqRes resp = new ReqRes();
+        Personnel personnel = null;
+        Departement departement = null;
 
+        if (registrationRequest.getRole() != Role.Admin && registrationRequest.getRole() != Role.AdminRH) {
+            if (registrationRequest.getDepartement() != null && registrationRequest.getDepartement().getNomDep() != null) {
+                departement = departementRepo.findByNomDep(registrationRequest.getDepartement().getNomDep());
+                if (departement == null) {
+                    resp.setMessage("Département introuvable");
+                    resp.setStatusCode(401);
+                    return resp;
+                }
+            } else {
+                resp.setMessage("Département non fourni ou nom du département invalide");
+                resp.setStatusCode(400);
+                return resp;
+            }
+        }
+
+        if (personnelRepo.existsByEmail(registrationRequest.getEmail())) {
+            resp.setStatusCode(400);
+            resp.setMessage("Un utilisateur avec cet e-mail existe déjà.");
+            return resp;
+        }
         try {
-            Personnel personnel = new Personnel();
-            personnel.setEmail(registrationRequest.getEmail());
+            // Créer la sous-classe appropriée en fonction du rôle
+            switch (registrationRequest.getRole()) {
+                case Role.User:
+                    Employe employe = new Employe();
+                    employe.setDepartement(departement);
+                    employe.setDateEmbauche(registrationRequest.getDateEmbauche());
+                    employe.setsoldeCumule();
+                    employe.setManager(departement.getManager());
+
+                    AdminRH adminRHFixe = adminRHRepo.findFirstByOrderByIdAsc();
+                    employe.setAdminRH(adminRHFixe);
+
+                    employe.setPoste(registrationRequest.getPoste());
+                    personnel = employe;
+                    break;
+                case Role.Manager:
+                    Manager manager = new Manager();
+                    manager.setDepartement(departement);
+                    personnel = manager;
+                    break;
+                case Role.AdminRH:
+                    AdminRH adminRH = new AdminRH();
+                    personnel = adminRH;
+                    break;
+                case Role.Admin:
+                    Admin admin = new Admin();
+                    personnel = admin;
+                    break;
+                default:
+                    resp.setStatusCode(400);
+                    return resp;
+            }
+
+            // Définir les champs communs
+            personnel.setCIN(registrationRequest.getCIN());
             personnel.setNom(registrationRequest.getNom());
             personnel.setPrenom(registrationRequest.getPrenom());
             personnel.setTel(registrationRequest.getTel());
-            personnel.setRole(registrationRequest.getRole());
-            personnel.setCIN(registrationRequest.getCIN());
+            personnel.setEmail(registrationRequest.getEmail());
             personnel.setPwd(passwordEncoder.encode(registrationRequest.getPwd()));
+            personnel.setRole(registrationRequest.getRole());
 
+            // Enregistrer le personnel
             Personnel savedPersonnel = personnelRepo.save(personnel);
-            if (savedPersonnel.getId() > 0) {
-                resp.setPersonnel(savedPersonnel);
-                resp.setMessage("Personnel enregistré avec succès");
-                resp.setStatusCode(200);
-            }
-
-        } catch (Exception e) {
+            resp.setPersonnel(savedPersonnel);
+            resp.setMessage("Utilisateur enregistré avec succès");
+            resp.setStatusCode(200);
+        }catch (Exception e) {
             resp.setStatusCode(500);
             resp.setError(e.getMessage());
+            return resp;
         }
+
         return resp;
+
     }
+
+
 
     public ReqRes login(ReqRes loginRequest) {
         ReqRes response = new ReqRes();
@@ -126,77 +203,114 @@ public class PersonnelManagementService {
         }
     }
 
-    public ReqRes getPersonnelById(Integer id) {
+    @Transactional
+    public ReqRes deletePersonnel(Integer id) {
         ReqRes reqRes = new ReqRes();
+
         try {
-            Personnel personnel = personnelRepo.findById(id).orElseThrow(() -> new RuntimeException("Personnel non trouvé"));
-            reqRes.setPersonnel(personnel);
-            reqRes.setStatusCode(200);
-            reqRes.setMessage("Personnel trouvé avec succès");
+                Personnel personnel=personnelRepo.findById(id).orElseThrow(()->new RuntimeException("personnel non trouvé"));
+                if (personnel instanceof Admin) {
+                    reqRes.setStatusCode(403);
+                    reqRes.setMessage("Vous ne pouvez pas supprimer un Admin.");
+                    return reqRes;
+                }
+
+                personnelRepo.delete(personnel);
+
+                reqRes.setStatusCode(200);
+
+                reqRes.setMessage("Personnel supprimé avec succès.");
         } catch (Exception e) {
             reqRes.setStatusCode(500);
             reqRes.setMessage("Erreur : " + e.getMessage());
         }
+
         return reqRes;
     }
 
-    public ReqRes deletePersonnel(Integer id) {
-        ReqRes reqRes = new ReqRes();
-        try {
-            Optional<Personnel> personnelOptional = personnelRepo.findById(id);
-            if (personnelOptional.isPresent()) {
-                personnelRepo.deleteById(id);
-                reqRes.setStatusCode(200);
-                reqRes.setMessage("Personnel supprimé avec succès");
-            } else {
-                reqRes.setStatusCode(404);
-                reqRes.setMessage("Personnel non trouvé");
-            }
-        } catch (Exception e) {
-            reqRes.setStatusCode(500);
-            reqRes.setMessage("Erreur : " + e.getMessage());
-        }
-        return reqRes;
-    }
 
     public ReqRes updatePersonnel(Integer id, Personnel updatedPersonnel) {
         ReqRes reqRes = new ReqRes();
+
         try {
             Optional<Personnel> personnelOptional = personnelRepo.findById(id);
-            if (personnelOptional.isPresent()) {
-                Personnel existingPersonnel = personnelOptional.get();
-                existingPersonnel.setEmail(updatedPersonnel.getEmail());
-                existingPersonnel.setNom(updatedPersonnel.getNom());
-                existingPersonnel.setPrenom(updatedPersonnel.getPrenom());
-                existingPersonnel.setCIN(updatedPersonnel.getCIN());
-                existingPersonnel.setTel(updatedPersonnel.getTel());
-                existingPersonnel.setRole(updatedPersonnel.getRole());
 
-                if (updatedPersonnel.getPwd() != null && !updatedPersonnel.getPwd().isEmpty()) {
-                    existingPersonnel.setPwd(passwordEncoder.encode(updatedPersonnel.getPwd()));
-                }
-
-                Personnel savedPersonnel = personnelRepo.save(existingPersonnel);
-                reqRes.setPersonnel(savedPersonnel);
-                reqRes.setStatusCode(200);
-                reqRes.setMessage("Personnel mis à jour avec succès");
-            } else {
+            if (personnelOptional.isEmpty()) {
                 reqRes.setStatusCode(404);
                 reqRes.setMessage("Personnel non trouvé");
+                return reqRes;
             }
+
+            Personnel existingPersonnel = personnelOptional.get();
+
+            // Mise à jour des informations générales communes
+            existingPersonnel.setEmail(updatedPersonnel.getEmail());
+            existingPersonnel.setNom(updatedPersonnel.getNom());
+            existingPersonnel.setPrenom(updatedPersonnel.getPrenom());
+            existingPersonnel.setCIN(updatedPersonnel.getCIN());
+            existingPersonnel.setTel(updatedPersonnel.getTel());
+            existingPersonnel.setRole(updatedPersonnel.getRole());
+
+            if (updatedPersonnel.getPwd() != null && !updatedPersonnel.getPwd().isEmpty()) {
+                existingPersonnel.setPwd(passwordEncoder.encode(updatedPersonnel.getPwd()));
+            }
+
+            // Mise à jour des propriétés spécifiques en fonction du type d'instance
+            if (existingPersonnel instanceof Employe employe) {
+                if (updatedPersonnel instanceof Employe updatedEmploye) {
+                    employe.setDepartement(departementRepo.findByNomDep(
+                            updatedEmploye.getDepartement().getNomDep()));
+                } else {
+                    reqRes.setStatusCode(400);
+                    reqRes.setMessage("Type de personnel incompatible : attendu Employe");
+                    return reqRes;
+                }
+            } else if (existingPersonnel instanceof Manager manager) {
+                if (updatedPersonnel instanceof Manager updatedManager) {
+                    manager.setDepartement(departementRepo.findByNomDep(
+                            updatedManager.getDepartement().getNomDep()));
+                } else {
+                    reqRes.setStatusCode(400);
+                    reqRes.setMessage("Type de personnel incompatible : attendu Manager");
+                    return reqRes;
+                }
+            }
+
+            // Sauvegarde des modifications
+            Personnel savedPersonnel = personnelRepo.save(existingPersonnel);
+            reqRes.setPersonnel(savedPersonnel);
+            reqRes.setStatusCode(200);
+            reqRes.setMessage("Personnel mis à jour avec succès");
+
         } catch (Exception e) {
             reqRes.setStatusCode(500);
-            reqRes.setMessage("Erreur : " + e.getMessage());
+            reqRes.setMessage("Erreur lors de la mise à jour : " + e.getMessage());
         }
+
         return reqRes;
     }
+
+
 
     public ReqRes getMyInfo(String email) {
         ReqRes reqRes = new ReqRes();
         try {
             Optional<Personnel> personnelOptional = personnelRepo.findByEmail(email);
             if (personnelOptional.isPresent()) {
-                reqRes.setPersonnel(personnelOptional.get());
+                Personnel personnel = personnelOptional.get();
+                //System.out.println("Classe de personnel: " + personnel.getClass().getName());
+
+                if (personnel instanceof Employe) {
+                    Employe employe = (Employe) personnel;  // Cast to the Employe class
+                    reqRes.setEmploye(employe);
+                }
+
+                if(personnel.getRole()==Role.Manager){
+                    Manager manager=(Manager) personnel;
+                    reqRes.setManager(manager);
+                }
+
+                reqRes.setPersonnel(personnel);
                 reqRes.setStatusCode(200);
                 reqRes.setMessage("Succès");
             } else {
@@ -209,5 +323,18 @@ public class PersonnelManagementService {
             reqRes.setMessage("Erreur : " + e.getMessage());
         }
         return reqRes;
+    }
+
+    public List<Employe> getAllEmployees() {
+        return personnelRepo.findAllEmployees();
+    }
+
+    public List<Manager> getAllManagers() {
+        return personnelRepo.findAllManagers();
+    }
+
+    public AdminRH getAdminRH() {
+        return personnelRepo.findAdminRH()
+                .orElseThrow(() -> new RuntimeException("AdminRH introuvable !"));
     }
 }

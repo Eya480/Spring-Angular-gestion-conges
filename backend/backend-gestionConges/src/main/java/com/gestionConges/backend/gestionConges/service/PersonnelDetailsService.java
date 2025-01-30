@@ -15,6 +15,6 @@ public class PersonnelDetailsService implements UserDetailsService {
     private PersonnelRepo PersonnelRepo;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return PersonnelRepo.findByEmail(username).orElseThrow();
+        return PersonnelRepo.findByEmail(username).orElseThrow(()-> new UsernameNotFoundException("User non trouvé!"+username));
     }
 }

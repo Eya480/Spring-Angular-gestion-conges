@@ -16,15 +16,24 @@ public class Personnel implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(unique = true)
     private Long CIN;
+
     private String nom;
+
     private String prenom;
+
     private String tel;
+
+    @Column(unique = true)
     private String email;
+
     private String pwd;
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+
 
     // Getters et Setters manuels
 

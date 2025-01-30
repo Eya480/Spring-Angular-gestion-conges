@@ -2,9 +2,9 @@ package com.gestionConges.backend.gestionConges.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.gestionConges.backend.gestionConges.model.Personnel;
-import com.gestionConges.backend.gestionConges.model.Role;
+import com.gestionConges.backend.gestionConges.model.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -24,9 +24,21 @@ public class ReqRes {
     private String pwd; // Mot de passe du personnel
     private Role role; // Rôle du personnel
     private Personnel personnel; // Objet Personnel
+    private Employe employe;
+    private Manager manager;
     private List<Personnel> personnelList; // Liste de Personnel
+    private Departement departement;
+    private LocalDate dateEmbauche; // For Employe
+    private String poste; // For Employe
+    // Getters and Setters
 
-    // Getters et Setters manuels
+    public Long getCIN() {
+        return CIN;
+    }
+
+    public void setCIN(Long CIN) {
+        this.CIN = CIN;
+    }
 
     public int getStatusCode() {
         return statusCode;
@@ -74,14 +86,6 @@ public class ReqRes {
 
     public void setExpirationTime(String expirationTime) {
         this.expirationTime = expirationTime;
-    }
-
-    public Long getCIN() {
-        return CIN;
-    }
-
-    public void setCIN(Long CIN) {
-        this.CIN = CIN;
     }
 
     public String getNom() {
@@ -140,11 +144,50 @@ public class ReqRes {
         this.personnel = personnel;
     }
 
+    public Employe getEmploye() {
+        return employe;
+    }
+
+    public void setEmploye(Employe employe) {
+        this.employe = employe;
+    }
+    public Manager getManager() {
+        return manager;
+    }
+
+    public void setManager(Manager manager) {
+        this.manager = manager;
+    }
+
     public List<Personnel> getPersonnelList() {
         return personnelList;
     }
 
     public void setPersonnelList(List<Personnel> personnelList) {
         this.personnelList = personnelList;
+    }
+
+    public Departement getDepartement() {
+        return departement;
+    }
+
+    public void setDepartement(Departement departement) {
+        this.departement = departement;
+    }
+
+    public LocalDate getDateEmbauche() {
+        return dateEmbauche;
+    }
+
+    public void setDateEmbauche(LocalDate dateEmbauche) {
+        this.dateEmbauche = dateEmbauche;
+    }
+
+    public String getPoste() {
+        return poste;
+    }
+
+    public void setPoste(String poste) {
+        this.poste = poste;
     }
 }
