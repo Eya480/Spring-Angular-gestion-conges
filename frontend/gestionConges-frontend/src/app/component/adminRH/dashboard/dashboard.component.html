@@ -1,85 +1,144 @@
 <div class="container mt-4">
-  <div class="row">
-    <!-- Solde de congés -->
-    <div class="col-md-4 mb-4">
-      <div class="card custom-card text-white" style="background-color: rgb(9, 24, 14);">
-        <div class="card-body">
-          <h5 class="card-title">Demande en attente</h5>
-          <p class="card-text display-4">{{att}}</p>
-        </div>
-      </div>
-    </div>
-    <!-- Demandé en attente -->
-    <div class="col-md-4 mb-4">
-      <div class="card custom-card text-black" style="background-color: rgb(83, 204, 93);">
-        <div class="card-body">
-          <h5 class="card-title">Demandes en Réfusées</h5>
-          <p class="card-text display-4">{{refuse}}</p>
-        </div>
-      </div>
-    </div>
-    <!-- Demandé approuvé -->
-    <div class="col-md-4 mb-4">
-      <div class="card custom-card text-white" style="background-color: rgb(116, 128, 13);">
-        <div class="card-body">
-          <h5 class="card-title">Demandes approuvées</h5>
-          <p class="card-text display-4">{{approuve}}</p>
-        </div>
-      </div>
+  <div class="row mb-5 align-items-center" style="margin-top: 50px;">
+    <!-- Titre -->
+    <div class="col-12 col-md-6">
+      <h2 class="text-dark fw-bold">Bonjour, <span style="color: green;">Admin Ressources Humaines 😊</span></h2>
     </div>
   </div>
+
   <div class="row">
-    <div class="col-md-4 mb-4">
-      <div class="card custom-card text-black" style="background-color: rgb(108, 233, 77);">
-        <div class="card-body">
-          <h5 class="card-title">Demande d'extension en attente</h5>
-          <p class="card-text display-4">{{ext}}</p>
+    <!-- Carte pour le nombre d'utilisateurs -->
+    <div class="col-md-2 col-sm-3 mb-4">
+      <div class="card custom-card text-white" style="background-color: rgb(187, 178, 95); height: 150px;">
+        <div class="card-body position-relative">
+          <h5 class="card-title">Demande En Attente</h5>
+          <p class="card-text display-5">{{ att }}</p> <!-- Réduit la taille du texte -->
+          <i class="bi bi-clock position-absolute text-white" style="right: 10px; top: 50%; transform: translateY(-50%); font-size: 3rem;"></i>
         </div>
       </div>
     </div>
-    <div class="col-md-4 mb-4">
-      <div class="card custom-card text-white" style="background-color: rgb(12, 88, 38);">
-        <div class="card-body">
+
+    <!-- Carte pour le nombre de départements -->
+    <div class="col-md-2 col-sm-3 mb-4">
+      <div class="card custom-card text-white" style="background-color: rgb(116, 187, 95); height: 150px;">
+        <div class="card-body position-relative">
+          <h5 class="card-title">Demandes Approuvées</h5>
+          <p class="card-text display-5">{{ approuve }}</p>
+          <i class="bi bi-check-circle position-absolute text-white" style="right: 10px; top: 50%; transform: translateY(-50%); font-size: 3rem;"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carte pour les demandes refusées -->
+    <div class="col-md-2 col-sm-3 mb-4">
+      <div class="card custom-card text-white" style="background-color: rgb(95, 187, 152); height: 150px;">
+        <div class="card-body position-relative">
+          <h5 class="card-title">Demandes Refusées</h5>
+          <p class="card-text display-5">{{ refuse }}</p>
+          <i class="bi bi-x-circle position-absolute text-black" style="right: 10px; top: 50%; transform: translateY(-50%); font-size: 3rem;"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carte pour le nombre de congés -->
+    <div class="col-md-2 col-sm-3 mb-4">
+      <div class="card custom-card text-white" style="background-color: rgb(135, 136, 77); height: 150px;">
+        <div class="card-body position-relative">
           <h5 class="card-title">Total Type Congés</h5>
-          <p class="card-text display-4">{{nbtypeConges}}</p>
+          <p class="card-text display-5">{{ nbtypeConges }}</p>
+          <i class="bi bi-calendar-check position-absolute text-white" style="right: 10px; top: 50%; transform: translateY(-50%); font-size: 3rem;"></i>
         </div>
       </div>
     </div>
-    <div class="col-md-4 mb-4">
-      <div class="card custom-card text-black"  style="background-color: rgb(79, 214, 124);">
-        <div class="card-body">
+
+    <!-- Carte pour le nombre d'employés -->
+    <div class="col-md-2 col-sm-3 mb-4">
+      <div class="card custom-card text-white" style="background-color: rgb(101, 189, 135); height: 150px;">
+        <div class="card-body position-relative">
           <h5 class="card-title">Total Employés</h5>
-          <p class="card-text display-4">{{employees?.length}}</p>
+          <p class="card-text display-5">{{ employees?.length }}</p>
+          <i class="bi bi-person-fill position-absolute text-black" style="right: 10px; top: 50%; transform: translateY(-50%); font-size: 3rem;"></i>
         </div>
       </div>
     </div>
   </div>
-  <!-- Tableau des Départements -->
-  <div class="card mt-4" style="border: 1px solid grey;">
-    <div class="card-header custom-card-header text-black fw-bold">Demandes de Congé par Département</div>
-    <div class="card-body">
-      <table class="table table-hover">
-        <thead >
-          <tr>
-            <th>Département</th>
-            <th>Manager</th>
-            <th>Demandes en Attente</th>
-            <th>Demandes Validées</th>
-            <th>Demandes Refusées</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for(departement of departements; track departement){
-          <tr>
-            <td>{{ departement.nomDep }}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
+
+  <div class="row">
+    <!-- Tableau des utilisateurs -->
+    <div class="col-md-7 mb-4">
+      <div class="card">
+        <div class="card-header custom-card-header text-black fw-bold">Demandes de Congé par Département</div>
+        <div class="card-body">
+          <table class="table table-striped" style="border: 1px solid GREY;">
+            <thead>
+              <tr>
+                <th>Département</th>
+                <th>Manager</th>
+                <th>En Attente</th>
+                <th>Validées</th>
+                <th>Refusées</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for(departement of departements; track departement){
+              <tr>
+                <td>{{ departement.nomDep }}</td>
+                <td>
+                  <ng-container *ngIf="departement.manager?.nom; else noManager">
+                    {{ departement.manager?.nom }} {{ departement.manager?.prenom }}
+                  </ng-container>
+                  <ng-template #noManager>
+                    <i class="bi bi-x-circle" style="font-size: 20px;"></i>
+                  </ng-template>
+                </td>
+                <td>
+                  <span class="badge bg-success ">{{ countDemandesByStatus(departement.manager?.demandes, 'En_Attente') }}</span>
+                </td>
+                <td>
+                  <span class="badge bg-success">{{ countDemandesByStatus(departement.manager?.demandes, 'Approuve') }}</span>
+                </td>
+                <td>
+                  <span class="badge bg-success">{{ countDemandesByStatus(departement.manager?.demandes, 'Refuse') }}</span>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tableau des départements -->
+    <div class="col-md-5 mb-4">
+      <div class="card">
+        <div class="card-header custom-card-header text-white fw-bold bg-success">Absences Pour D'Aujourd'hui</div>
+        <div class="card-body">
+          @if(absenceAjourdui!.length>0){
+          <table class="table table-striped" style="border: 1px solid GREY;">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Date Début</th>
+                <th>Date Fin</th>
+                <th>Raison</th>
+              </tr>
+            </thead>
+            <tbody>
+               @for(abs of absenceAjourdui;track abs){
+              <tr>
+                <td>{{ abs.employe.nom }} {{abs.employe.prenom}}</td>
+                <td>{{ abs.dateDebut}}</td>
+                <td>{{ abs.dateFin}}</td>
+                <td>{{ abs.raison}}</td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        }@else {
+          <div class="fw-bold text-muted" style="text-align: center;">Aucune absence pour Aujourd'hui</div>
         }
-        </tbody>
-      </table>
+        </div>
+      </div>
     </div>
   </div>
 </div>

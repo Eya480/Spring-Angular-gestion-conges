@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http'; // <-- Import HttpClient
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { departements } from '../../interfaces/departementsInt';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,16 @@ export class ServiceService {
   
     return this.http.get<any>(url, { headers });
   }
+
+  getAllNotif(token: string): Observable<any> {
+    const url = `${this.url}/UserManager/get-all-notif`;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+  
+    return this.http.get<any>(url, { headers });
+  }
+
   logOut(): void {
     if (typeof localStorage !== 'undefined') {
       // Remove token and role from localStorage
@@ -93,8 +104,8 @@ updateUser(userId: string, userData: any, token: string): Observable<any> {
   return this.http.put<any>(url, userData, { headers });
 }
 //departement service is here
-getAllDepartements(): Observable<any[]> {
-  return this.http.get<any[]>(`${this.url}/api/departements/get-all`);
+getAllDepartements(): Observable<departements[]> {
+  return this.http.get<departements[]>(`${this.url}/api/departements/get-all`);
 }
 
 

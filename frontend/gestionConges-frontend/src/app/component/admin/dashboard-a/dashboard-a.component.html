@@ -1,1 +1,96 @@
-<p>dashboard-a works!</p>
+<div class="container mt-4">
+    <div class="row mb-5 align-items-center" style="margin-top: 50px;">
+    <!-- Titre -->
+    <div class="col-12 col-md-6">
+      <h2 class="text-dark fw-bold">Bonjour, <span style="color: green;">Admin 😊</span></h2>
+    </div>
+  </div>
+    <div class="row">
+      <!-- Carte pour le nombre d'utilisateurs -->
+      <div class="col-md-4 mb-4 ">
+        <div class="card custom-card text-white" style="background-color: rgb(106, 187, 95); width: 300px; height: 150px;">
+          <div class="card-body position-relative">
+            <h5 class="card-title text-white">Nombre d'Utilisateurs</h5>
+            <p class="card-text display-4">{{ users?.length }}</p>
+            <!-- Icône grande positionnée à droite -->
+            <i class="bi bi-person-fill position-absolute text-white" style="right: 10px; top: 50%; transform: translateY(-50%); font-size: 3rem;"></i>
+          </div>
+        </div>
+      </div>
+      
+      
+  
+      <!-- Carte pour le nombre de départements -->
+      <div class="col-md-4 mb-4">
+        <div class="card custom-card text-white" style="background-color: rgb(95, 187, 130); width: 300px; height: 150px;">
+            <div class="card-body position-relative">
+            <h5 class="card-title text-white">Nombre de Départements</h5>
+            <p class="card-text display-4">{{ departements?.length }}</p>
+            <i class="bi bi-briefcase fs-2 position-absolute text-white" style="right: 15px; top: 50%; transform: translateY(-50%);"></i>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row">
+      <!-- Tableau des utilisateurs -->
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-header custom-card-header text-black fw-bold">Les Utilisateurs</div>
+          <div class="card-body">
+            <table class="table table-striped" style="border: 1px solid GREY;">
+              <thead>
+                <tr>
+                  <th>Nom d'utilisateur</th>
+                  <th>Rôle</th>
+                  <th>Email</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Boucle pour afficher les utilisateurs -->
+                <tr *ngFor="let utilisateur of users">
+                  <td>{{ utilisateur.nom }}</td>
+                  <td>
+                    <span class="badge" [ngClass]="{
+                      'bg-warning': utilisateur.role === 'AdminRH',
+                      'bg-success': utilisateur.role === 'Manager',
+                      'bg-danger': utilisateur.role === 'User'
+                    }">
+                      {{ utilisateur.role === 'AdminRH' ? 'Admin RH' : utilisateur.role }}
+                    </span>
+                  </td>
+                  <td>{{ utilisateur.email }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Tableau des départements -->
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-header custom-card-header text-black fw-bold">Les Départements</div>
+          <div class="card-body">
+            <table class="table table-striped" style="border: 1px solid GREY;">
+              <thead>
+                <tr>
+                  <th>Nom du Département</th>
+                  <th>Chef de Département</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Boucle pour afficher les départements -->
+                <tr *ngFor="let departement of departements">
+                  <td>{{ departement.nomDep }}</td>
+                  <td>{{ departement.manager?.nom || 'Pas de manager' }} {{departement.manager?.prenom}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

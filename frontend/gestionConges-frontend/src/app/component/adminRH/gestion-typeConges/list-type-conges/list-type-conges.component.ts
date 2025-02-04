@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AdminRHServiceService } from '../../service/admin-rhservice.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-list-type-conges',
@@ -11,8 +12,17 @@ import { AdminRHServiceService } from '../../service/admin-rhservice.service';
 export class ListTypeCongesComponent {
     typeConges? : any [];
     token = localStorage.getItem("token");
+    selectedId?: string;
+    
+    @ViewChild('deleteModal') deleteModal!: TemplateRef<any>;
+
+    openDeleteModal(id: string): void {
+      this.selectedId = id;
+      this.modelService.open(this.deleteModal, { ariaLabelledBy: 'modal-basic-title' });
+    }
+
   
-    constructor(private adminRhService : AdminRHServiceService){}
+    constructor(private adminRhService : AdminRHServiceService,private modelService:NgbModal){}
   
     ngOnInit(): void {
       if(this.token)
@@ -27,17 +37,15 @@ export class ListTypeCongesComponent {
   
     }
   
-    deleteTypesConges(id: string | undefined): void {
+    deleteTypesConges(id: string | undefined,modal:any): void {
       if (id && this.token) {
-        if (confirm('Êtes-vous sûr de vouloir supprimer ce Type Conges ?')) {
           this.adminRhService.deleteTypeC(id,this.token).subscribe({
-            next: (data) => {
-              //console.log('Réponse de suppression :', data)
+            next: () => {
               this.typeConges = this.typeConges?.filter(t => t.idTypeConge !== id);
+              modal.close('Close click');
             },
             error: (error) => console.error('Erreur lors de la suppression du Type', error)
           });
-        }
       } else {
         console.error('ID du Type est undefined');
       }

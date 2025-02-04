@@ -48,6 +48,9 @@ public class PersonnelManagementService {
     @Autowired
     private EmployeService employeService;
 
+    @Autowired
+    private NotifRepo notifRepo;
+
     public ReqRes register(ReqRes registrationRequest) {
         ReqRes resp = new ReqRes();
         Personnel personnel = null;
@@ -95,12 +98,13 @@ public class PersonnelManagementService {
                     personnel = manager;
                     break;
                 case Role.AdminRH:
+                    if(adminRHRepo.findFirstByOrderByIdAsc()!=null){
+                        resp.setStatusCode(400);
+                        resp.setMessage("Il existe déja un Admin RH!");
+                        return resp;
+                    }
                     AdminRH adminRH = new AdminRH();
                     personnel = adminRH;
-                    break;
-                case Role.Admin:
-                    Admin admin = new Admin();
-                    personnel = admin;
                     break;
                 default:
                     resp.setStatusCode(400);
@@ -228,6 +232,34 @@ public class PersonnelManagementService {
         return reqRes;
     }
 
+    public void updateRole(Integer id, Role newRole, String nomDep) {
+        Departement departement = departementRepo.findByNomDep(nomDep);
+        Personnel personnel = personnelRepo.findById(id).orElse(null);
+
+        if (personnel == null) {
+            throw new IllegalArgumentException("Personnel not found");
+        }
+
+        // Vérifier si l'utilisateur est un User et doit devenir Manager
+        if (personnel.getRole() == Role.User && newRole == Role.Manager) {
+            if (departement.getManager() != null) {
+                throw new IllegalStateException("Ce Département a déjà un Manager");
+            } else {
+                personnel.setRole(Role.Manager); // Changer directement le rôle
+
+                // Caster en Manager et assigner le département
+                Manager manager = (Manager) personnel;
+                manager.setDepartement(departement);
+                departement.setManager(manager); // Associer le manager au département
+
+                personnelRepo.save(manager); // Mettre à jour en base
+                departementRepo.save(departement);
+            }
+        }
+    }
+
+
+
 
     public ReqRes updatePersonnel(Integer id, Personnel updatedPersonnel) {
         ReqRes reqRes = new ReqRes();
@@ -290,6 +322,10 @@ public class PersonnelManagementService {
         return reqRes;
     }
 
+    public List<Notification> getAllNotifByPersonnel(String email){
+        return notifRepo.getAllNotificationByDestinataire(personnelRepo.findByEmail(email).get());
+    }
+
 
 
     public ReqRes getMyInfo(String email) {
@@ -329,12 +365,9 @@ public class PersonnelManagementService {
         return personnelRepo.findAllEmployees();
     }
 
-    public List<Manager> getAllManagers() {
-        return personnelRepo.findAllManagers();
+    public Personnel getPersonnelById(Integer id){
+        return personnelRepo.findById(id).orElse(null);
     }
 
-    public AdminRH getAdminRH() {
-        return personnelRepo.findAdminRH()
-                .orElseThrow(() -> new RuntimeException("AdminRH introuvable !"));
-    }
+
 }

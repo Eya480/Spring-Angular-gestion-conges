@@ -41,12 +41,14 @@ public class SecurityConfig {
                         .requestMatchers("/api/adminRH/**").hasAnyAuthority("Admin")
                         .requestMatchers("/api/Manager/**").hasAnyAuthority("Manager")
                         .requestMatchers("/api/employees/**").hasAnyAuthority("AdminRH")
+                        .requestMatchers("/UserManager/**").hasAnyAuthority("Manager","User")
                         .requestMatchers("/adminRHUserManagerAdmin/**").hasAnyAuthority("AdminRH", "Manager", "User","Admin")
+                        .requestMatchers("/api/adminAdminRH").hasAnyAuthority("Admin","AdminRH")
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-        return httpSecurity.build();
+                 return httpSecurity.build();
     }
 
     @Bean

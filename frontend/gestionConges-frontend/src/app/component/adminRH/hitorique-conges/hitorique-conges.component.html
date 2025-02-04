@@ -1,0 +1,75 @@
+<form [formGroup]="employeeForm">
+  <div class="container mt-5">
+    <div class="row mb-5 align-items-center">
+      <div class="col-12 col-md-6">
+        <h2 class="text-dark fw-bold">🕒 Historique des Congés</h2>
+        <p class="text-muted">Explorez l'historique des demandes de congé par département et manager</p>
+      </div>
+    </div>
+
+    <div class="d-flex">
+      <!-- Sidebar -->
+      <div class="flex-shrink-0 me-4" style="width: 250px; border-right: 1px solid gray; padding: 10px;">  
+        <div class="mb-4">
+          <label for="filter" class="mb-2 mb-md-3">Filtrer par Département</label>
+          <select formControlName="departement" class="form-select border-black" (change)="filterDepartement()">
+            <option value="">Tous les départements</option>
+            <option *ngFor="let dep of departements" [value]="dep.nomDep">{{ dep.nomDep }}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Contenu principal -->
+      <div class="flex-grow-1">
+        <div *ngFor="let departement of filteredDepartements" class="mb-5">
+          <!-- Département -->
+          <h4 class="fw-bold text-primary">{{ departement.nom }}</h4>
+          
+          <!-- Manager -->
+          <div class="card mb-3" style="background-color: rgba(158, 240, 137, 0.596);">
+            <div class="card-body">
+              <h5 class="card-title">
+                <i class="bi bi-person-circle text-black"></i> 
+                Manager du Département {{departement.nomDep}} : <strong>{{ departement.manager?.nom }} {{ departement.manager?.prenom }}</strong>
+              </h5>
+              <p class="card-text"><strong>Email :</strong> {{ departement.manager?.email }}</p>
+            </div>
+          </div>
+
+          <!-- Liste des demandes du manager -->
+          <div class="row">
+            <div *ngIf="departement?.manager?.demandes?.length > 0; else noDemands">
+              <!-- Liste des demandes du manager -->
+              <div class="row">
+                <div class="col-md-4 mb-4" *ngFor="let demande of departement?.manager?.demandes">
+                  <div class="card shadow-sm">
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold" style="color: rgb(59, 117, 32);">
+                        <i class="bi bi-person-circle text-black"></i> 
+                        User
+                      </h5>
+                      <p class="card-text"><strong>Type : </strong> {{ demande.typeConge?.nomTypeConge }}</p>
+                      <p class="card-text"><strong>Statut : </strong> 
+                        <span class="badge" [ngClass]="{
+                          'bg-warning': demande.statut === 'En_Attente',
+                          'bg-success': demande.statut === 'Approuve',
+                          'bg-danger': demande.statut === 'Refuse'
+                        }">
+                          {{ demande.statut === 'En_Attente' ? 'En Attente' : demande.statut }}
+                        </span>
+                      </p>
+                      <p class="card-text"><strong>Date début : </strong> {{ demande.dateDebut }}</p>
+                      <p class="card-text"><strong>Date fin : </strong> {{ demande.dateFin }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- No demands found -->
+            <ng-template #noDemands>
+              <div class="text-center text-muted">
+                Aucune demande pour ce manager.
+              </div>
+            </ng-template>
+            

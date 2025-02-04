@@ -1,109 +1,116 @@
-<div class="container mt-5" style="max-width: 100%; width: 95%;">
-  <!-- Header Section -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="text-secondary fw-bold">Liste des Demandes Congés</h2>
-    <a class="btn shadow-sm text-white d-flex align-items-center" [routerLink]="'../addDemande'"
-           style="background-color: rgb(29, 138, 29); border-radius: 25px; padding: 8px 20px; font-size: 14px; transition: all 0.3s ease;">
-          Ajouter un(e) Demande
-        </a>
-  </div>
+<form [formGroup]="typeForm">
+  <div class="container mt-5" style="max-width: 100%; width: 95%;">
+    
+    <!-- Header Section -->
+    <div class="row mb-4 align-items-center">
+      <div class="col-12 col-md-6">
+        <h2 class="text-dark fw-bold">📅 Liste Des Demandes De Congés</h2>
+        <p class="text-muted ms-3">Consultez la liste de vos demandes de congés et ajoutez de nouvelles demandes.</p>
+      </div>
+    </div>
 
-  <!-- Filter Section -->
-  <div class="card p-2 mb-4 shadow-sm">
-    <div class="d-flex justify-content-between align-items-center">
-      <div class="d-flex flex-column w-50">
-        <label for="filter" class="mb-2 fw-bold" style="font-size: 14px; color: #555;">Filtrer par Type Congé</label>
-        <select class="form-select form-control-lg" [(ngModel)]="type" style="height: 40px; font-size: 16px; border: 2px solid #ccc;">
-          <option value="all">Tous les Types Congés</option>
-          @for(typeC of typeConges;track typeC){
-          <option [ngValue]="typeC.nomTypeConge">
-            {{ typeC.nomTypeConge }}
-          </option>
-        }
+    <!-- Filtre et Bouton Ajouter -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <label class="form-label fw-bold">Filtrer par Poste</label>
+        <select formControlName="type" class="form-select border-black" style="width: 250px;">
+          <option value="">Tous les Types de Congés</option>
+          <option *ngFor="let type of typeConges" [value]="type.nomTypeConge">{{ type.nomTypeConge }}</option>
         </select>
       </div>
 
-      <div class="d-flex justify-content-center align-items-center">
-        <!-- Filter Button -->
-        <button class="btn btn-success btn-lg ms-2" type="button" (click)="filter()" style="font-size: 16px; padding: 10px 25px;background-color: rgb(8, 68, 8);">
-          <i class="bi bi-funnel"></i> Filtrer
-        </button>
-        <!-- Reset Button -->
-        <button class="btn btn-outline-secondary btn-lg ms-2" type="button" (click)="resetFilter()" style="font-size: 16px; padding: 10px 25px;">
-          Réinitialiser
-        </button>
+      <a class="btn shadow-sm text-white"
+        [routerLink]="'../addDemande'"
+        style="background-color: rgb(29, 138, 29); border-radius: 25px; padding: 10px 20px; font-size: 14px;">
+        Ajouter Une Demande de Congé
+      </a>
+    </div>
+
+    <!-- Messages d'erreur -->
+    @if(errorMessage){
+      <div class="alert alert-danger mt-3">
+        {{ errorMessage }}
       </div>
+    }
+
+    <!-- Table Section -->
+    <div class="card shadow-sm">
+      <table class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Type de Congé</th>
+            <th scope="col">Date de Début</th>
+            <th scope="col">Date de Fin</th>
+            <th scope="col">Statut</th>
+            <th scope="col">Raison</th>
+            <th scope="col" class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let demande of demandeConges">
+            <td>{{ demande.typeConge.nomTypeConge }}</td>
+            <td>{{ demande.dateDebut }}</td>
+            <td>{{ demande.dateFin }}</td>
+            <td>
+              <span class="badge" [ngClass]="{
+                  'bg-success': demande.statut === 'Approuve', 
+                  'bg-danger': demande.statut === 'Refuse', 
+                  'bg-warning': demande.statut === 'En_Attente'
+                }">
+                {{ demande.statut === 'En_Attente' ? 'En Attente' : demande.statut }}
+              </span>
+            </td>
+            <td>
+              <button class="btn btn-link btn-sm text-decoration-none toggle-reason" (click)="toggleRaison(demande.idDemande)"  style="border: 1px solid gray;">
+                {{ demande.showRaison ? 'Masquer la Raison' : 'Afficher la Raison' }}
+              </button>
+              <p *ngIf="demande.showRaison" class="reason-text">
+                <strong>Raison :</strong> {{ demande.reason }}
+              </p>
+            </td>
+            <td class="text-center">
+              <a class="btn btn-outline-success btn-sm ms-2"
+                [routerLink]="['../', 'editDemande', demande.idDemande]"
+                [ngClass]="{ 'disabled': demande.statut == 'Approuve' || demande.statut == 'Refuse'}"
+                [attr.tabindex]="demande.statut == 'Approuve' || demande.statut == 'Refuse' ? -1 : null"
+                (click)="$event.preventDefault()">
+                <i class="bi bi-pencil-square"></i> 
+              </a>
+              <button class="btn btn-outline-danger btn-sm ms-2" (click)="openDeleteModal(demande.idDemande)" 
+                [disabled]="demande.statut=='Approuve' || demande.statut=='Refuse'">
+                <i class="bi bi-trash"></i>
+              </button>
+              <a class="btn btn-success btn-sm ms-2"
+                [routerLink]="['../', 'demandeExtension', demande.idDemande]"
+                [ngClass]="{ 'disabled': demande.statut != 'Approuve' }"
+                [attr.tabindex]="demande.statut == 'En_Attente' ? -1 : null"
+                (click)="$event.preventDefault()">
+                <i class="bi bi-calendar-plus"></i> Extension
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- No Data Found -->
+    <div *ngIf="!demandeConges || demandeConges.length === 0" class="text-center text-muted fw-bold">
+      Aucune Demande de Congé trouvée
     </div>
   </div>
+</form>
 
-  <!-- Messages d'erreur -->
-   @if(errorMessage){
-  <div class="alert alert-danger mt-3">
-    {{ errorMessage }}
-  </div>}
 
-  <!-- Table Section -->
-  <div class="card shadow-sm">
-    <table class="table table-striped table-bordered">
-      <thead>
-        <tr>
-          <th scope="col">Type de Congé</th>
-          <th scope="col">Date de Début</th>
-          <th scope="col">Date de Fin</th>
-          <th scope="col">Statut</th>
-          <th scope="col">Raison</th>
-          <th scope="col" class="text-center">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let demande of demandeConges">
-          <td>{{ demande.typeConge.nomTypeConge }}</td>
-          <td>{{ demande.dateDebut }}</td>
-          <td>{{ demande.dateFin }}</td>
-          <td>
-            <span class="badge" [ngClass]="{
-                'bg-success': demande.statut === 'Approuve', 
-                'bg-danger': demande.statut === 'Refuse', 
-                'bg-warning': demande.statut === 'En_Attente'
-              }">
-              {{demande.statut === 'En_Attente' ? 'En Attente' : 'Approuvée'}}
-            </span>
-          </td>
-          <td>
-            <button class="btn btn-link btn-sm text-decoration-none toggle-reason" (click)="toggleRaison(demande.idDemande)">
-              {{ demande.showRaison ? 'Masquer la Raison' : 'Afficher la Raison' }}
-            </button>
-            <p *ngIf="demande.showRaison" class="reason-text">
-              <strong>Raison :</strong> {{ demande.reason }}
-            </p>
-          </td>
-          <td class="text-center">
-            <a class="btn btn-outline-success btn-sm ms-2"
-              [routerLink]="['../', 'editDemande', demande.idDemande]"
-              [ngClass]="{ 'disabled': demande.statut == 'Approuve' || demande.statut == 'Refuse'}"
-              [attr.tabindex]="demande.statut == 'Approuve' || demande.statut == 'Refuse' ? -1 : null"
-              (click)="$event.preventDefault()">
-              <i class="bi bi-pencil-square"></i> 
-            </a>
-            <button class="btn btn-outline-danger btn-sm ms-2" (click)="deleteDemande(demande.idDemande)" 
-              [disabled]="demande.statut=='Approuve' || demande.statut=='Refuse'">
-              <i class="bi bi-trash"></i>
-            </button>
-            <a class="btn btn-primary btn-sm ms-2"
-              [routerLink]="['../', 'demandeExtension', demande.idDemande]"
-              [ngClass]="{ 'disabled': demande.statut != 'Approuve' }"
-              [attr.tabindex]="demande.statut == 'En_Attente' ? -1 : null"
-              (click)="$event.preventDefault()">
-              <i class="bi bi-calendar-plus"></i> Extension
-            </a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<ng-template #deleteModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Confirmer la suppression</h4>
+    <button type="button" class="close" (click)="modal.dismiss('Cross click')" style="margin-left: 150px;">&times;</button>
   </div>
-
-  <!-- No Data Found -->
-  <div *ngIf="!demandeConges || demandeConges.length === 0" class="text-center text-muted">
-    Aucune Demande de Congé trouvée
+  <div class="modal-body">
+    <p>Êtes-vous sûr de vouloir supprimer cette Demande Congé ?</p>
   </div>
-</div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Close click')">Annuler</button>
+    <button type="button" class="btn btn-success" (click)="deleteDemande(selectedId, modal)">Supprimer</button>
+  </div>
+</ng-template>

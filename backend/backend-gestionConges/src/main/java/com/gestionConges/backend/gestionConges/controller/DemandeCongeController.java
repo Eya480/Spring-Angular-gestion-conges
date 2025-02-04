@@ -60,11 +60,18 @@ public class DemandeCongeController {
         demandeConge.setTypeConge(typeCongeRepo.findByNomTypeConge(demandeConge.getTypeConge().getNomTypeConge()));
 
         LocalDate dateLimite = LocalDate.now().plusWeeks(2);
+        long nbJoursSouhaite=ChronoUnit.DAYS.between(demandeConge.getDateDebut(),demandeConge.getDateFin())+1;
         if(demandeConge.getTypeConge().getAffecteSoldeConge()){
-            if(!demandeCongeService.verifierSoldeRestant(email, ChronoUnit.DAYS.between(demandeConge.getDateDebut(),demandeConge.getDateFin())+1)){
+            if(!demandeCongeService.verifierSoldeRestant(email,nbJoursSouhaite)){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Solde de Congé insuffisant.");
             }
         }
+
+        if(demandeConge.getTypeConge().getnbCongeMax()<nbJoursSouhaite){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vous ne pouvez pas dépasser la limite *"+demandeConge.getTypeConge().getnbCongeMax()+"* jours pour ce type de congé");
+
+        }
+
         if (demandeConge.getDateDebut().isBefore(dateLimite)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La date de début doit être dans au moins 2 semaines à partir d'aujourd'hui.");
         }

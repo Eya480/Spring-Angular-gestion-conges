@@ -38,7 +38,16 @@ export class AdminRHServiceService {
   }
   
   getManagerByDepId(id : string , token: string): Observable<any>{
-    const url = `${this.basic_url}/Manager/${id}`; 
+    const url = `${this.basic_url}/adminAdminRH/Manager/${id}`; 
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<any>(url,{headers});
+  }
+
+  getAllDemandeByManagerId(id : string , token: string): Observable<any>{
+    const url = `${this.basic_url}/employees/demandeByManagerId/${id}`; 
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });

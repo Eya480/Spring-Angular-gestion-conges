@@ -1,1 +1,93 @@
-<p>historique-demandes works!</p>
+<form [formGroup]="congesForm">
+    <div class="container mt-5">
+        <div class="row mb-5 align-items-center">
+        <!-- Titre -->
+        <div class="col-12 col-md-6">
+          <h2 class="text-dark fw-bold">🕒 Historique des Congés du Département {{nomDep}}</h2>
+          <p class="text-muted" style="margin-bottom: 0px;">Explorez l'historique des demandes de congé de votre équipe</p>
+        </div>
+      </div>
+  
+      <div class="d-flex">
+        <!-- Sidebar: Zone de Recherche et Filtres -->
+        <div class="flex-shrink-0 me-4" style="width: 250px; border-right: 1px solid gray; padding: 10px;">  
+          <!-- Zone de Recherche -->
+          <div class="mb-4">
+            <label for="" class="form-label">Recherche par Employé</label>
+            <div class="position-relative w-100">
+                <input
+                  formControlName="searchInput"
+                  class="form-control border-black ps-5"
+                  type="search"
+                  placeholder="Nom Prénom"
+                />
+                <i class="bi bi-search position-absolute text-muted" style="left: 15px; top: 50%; transform: translateY(-50%);"></i>
+              </div>
+          </div>
+  
+          <!-- Filtre Type de Congé -->
+          <div class="mb-4">
+            <label for="dateDebut" class="form-label">Filtrer par Type Congé</label>
+            <select formControlName="typeConge" class="form-select border-black">
+                <option value="">Tous les types</option>
+                <option *ngFor="let type of typeConges" [value]="type.nomTypeConge">{{ type.nomTypeConge }}</option>
+              </select>
+          </div>
+  
+          <!-- Filtre Date de Début -->
+          <div class="mb-4">
+            <label for="dateDebut" class="form-label">Filtrer par Date</label>
+            <input formControlName="dateDebut" type="date" class="form-control border-black" />
+          </div>
+  
+        </div>
+  
+        <!-- Main Content: Liste des demandes de congés -->
+        <div class="flex-grow-1">  
+          <!-- Liste des demandes -->
+          <div class="row">
+            <div class="col-md-4 mb-4" *ngFor="let demande of congesArr()">
+              <div class="card shadow-sm">
+                <ng-container *ngIf="demande.estDExtension">
+                    <span class="fw-bold text-center" style="color: rgb(197, 117, 24);text-shadow: 1px 1px 1px black;">
+                      Demande d'Extension</span>
+                  </ng-container>
+                <div class="card-body">
+                  <h5 class="card-title fw-bold" style="color: rgb(59, 117, 32); padding-bottom: 15px; border-bottom: 2px solid;">
+                    <i class="bi bi-person-circle text-black"></i> {{ demande.employe.nom }} {{ demande.employe.prenom }}
+                  </h5>
+                  <p class="card-text" style="font-size: 15px; "><strong>Type : </strong> {{ demande.typeConge.nomTypeConge }}</p>
+                  <p class="card-text"><strong>Statut : </strong> 
+                    <span 
+                      class="badge" 
+                      [ngClass]="{
+                        'bg-warning': demande.statut === 'En_Attente',
+                        'bg-success': demande.statut === 'Approuve',
+                        'bg-danger': demande.statut === 'Refuse'
+                      }">
+                      {{ demande.statut === 'En_Attente' ? 'En Attente' : demande.statut }}
+                    </span>
+                  </p>
+
+                  <p class="card-text"><strong>Raison :</strong> <button class="btn btn-link btn-sm text-decoration-none " (click)="toggleRaison(demande.idDemande)">
+                    <span style="color: rgb(19, 105, 55);border: 1px solid;padding: 2px;">{{ demande.showRaison ? 'Masquer la Raison' : 'Afficher la Raison' }}</span>
+                  </button>
+                  <p *ngIf="demande.showRaison" class="reason-text">
+                "{{ demande.reason }}"
+                </p>
+
+
+                  <p class="card-text"><strong>Date début : </strong> {{ demande.dateDebut }}</p>
+                  <p class="card-text"><strong>Date fin : </strong> {{ demande.dateFin }}</p>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="congesArr().length === 0" class="col-12 text-center text-muted">
+              Aucune demande trouvée pour votre équipe pour le moment.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  

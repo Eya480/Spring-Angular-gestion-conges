@@ -4,6 +4,9 @@ import { adminGuard } from '../guard/guard.guard';
 import { DashboardAComponent } from './dashboard-a/dashboard-a.component';
 import { ListDepartsComponent } from './gestion-departement/list-departs/list-departs.component';
 import { AddDepartsComponent } from './gestion-departement/add-departs/add-departs.component';
+import { ListUsersComponent } from './gestion-user/list-users/list-users.component';
+import { AddUserComponent } from './gestion-user/add-user/add-user.component';
+import { EditUserComponent } from './gestion-user/edit-user/edit-user.component';
 
 const routes: Routes = [
   {
@@ -18,8 +21,22 @@ const routes: Routes = [
       component: ListDepartsComponent,
       canActivate: [adminGuard] // Apply adminRHGuard here
     },{
+      path : 'users',
+      component : ListUsersComponent,
+      canActivate: [adminGuard]
+    },
+    {
       path : 'addDepartement',
       component : AddDepartsComponent,
+      canActivate: [adminGuard]
+    },
+    {
+      path : 'addUser',
+      component : AddUserComponent,
+      canActivate: [adminGuard]
+    },{
+      path : 'editUser/:id',
+      component : EditUserComponent,
       canActivate: [adminGuard]
     }
 ];

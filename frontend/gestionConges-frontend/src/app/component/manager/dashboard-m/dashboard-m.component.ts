@@ -13,6 +13,7 @@ export class DashboardMComponent {
   demandeConges?: any[];
   employee?: any;
   demandesEnAttente?: any[];
+  nomDep?:string;
   nbDextension : number=0;
   token = localStorage.getItem("token");
   
@@ -45,6 +46,7 @@ export class DashboardMComponent {
           forkJoin(demandesAvecEmploye$).subscribe({
             next: (demandesAvecEmployes) => {
               this.demandeConges = demandesAvecEmployes;
+              this.nomDep=this.demandeConges[0].employe.departement.nomDep;
 
               // Calculer le nombre d'employés uniques en extrayant les employées
               const employesUnniques = new Set(demandesAvecEmployes.map(d => d.employe.id)); // Assurez-vous que chaque employé a un id unique

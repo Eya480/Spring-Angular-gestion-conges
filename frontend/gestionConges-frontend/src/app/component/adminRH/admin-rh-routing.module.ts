@@ -8,6 +8,7 @@ import { EditEmployeeComponent } from './gestion-employes/edit-employee/edit-emp
 import { ListTypeCongesComponent } from './gestion-typeConges/list-type-conges/list-type-conges.component';
 import { AddTypeCongesComponent } from './gestion-typeConges/add-type-conges/add-type-conges.component';
 import { EmployeeDetailsComponent } from './gestion-employes/employee-details/employee-details.component';
+import { HitoriqueCongesComponent } from './hitorique-conges/hitorique-conges.component';
 
 const routes: Routes = [
   {
@@ -41,6 +42,12 @@ const routes: Routes = [
     component: ListTypeCongesComponent,
     canActivate: [adminRHGuard] 
   },
+  {
+    path: 'hitoriqueConges', 
+    component: HitoriqueCongesComponent,
+    canActivate: [adminRHGuard] 
+  }
+  ,
   {
     path :'addTypeConges',
     component : AddTypeCongesComponent,

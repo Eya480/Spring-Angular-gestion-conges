@@ -1,8 +1,15 @@
 <div class="container mt-5" style="max-width: 100%; width: 95%;">
+  <div class="row mb-5 align-items-center">
+    <!-- Titre -->
+    <div class="col-12 col-md-6">
+      <h2 class="text-dark fw-bold">📝 Gestion des Types Congés</h2>
+      <p class="text-muted" style="margin-bottom: 0px;margin-left: 50px;">Consultez la liste des types congés</p>
+    </div>
+  </div>
+
     <!-- Header Section -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="text-secondary fw-bold">Liste des Types Congés</h2>
-        <a class="btn shadow-sm text-white d-flex align-items-center" [routerLink]="'../addTypeConges'"
+    <div class="d-flex mb-4" style="margin-left: 1050px;">
+        <a class="btn shadow-sm text-white" [routerLink]="'../addTypeConges'"
         style="background-color: rgb(29, 138, 29); border-radius: 25px; padding: 8px 20px; font-size: 14px; transition: all 0.3s ease;">
          Ajouter un type congés
       </a>
@@ -17,6 +24,7 @@
           <th scope="col">Nom du type</th>
           <th scope="col">Description</th>
           <th scope="col" class="thI">Impact sur le solde</th>
+          <th scope="col">Limite Jours Congé</th>
           <th scope="col" class="text-center">Actions</th>
           </tr>
         </thead>
@@ -28,10 +36,11 @@
             <td>{{ type.nomTypeConge }}</td>
             @if(type.descriptionC){<td>{{ type.descriptionC }}</td>}@else{<td>*****</td>}
             @if(type.affecteSoldeConge==true){<td class="text-center"><i class="bi bi-check fs-4" style="color:green;"></i>
-            </td>}@else{<td class="text-center"><i class="bi bi-x fs-4" style="color:rgb(231, 161, 8);"></i>
+            </td>}@else{<td class="text-center"><i class="bi bi-x fs-4" style="color:rgb(128, 92, 15);"></i>
             </td>}
+            <td style="text-align: center;"><span class="badge bg-warning">{{ type.nbCongeMax }}</span></td>
             <td class="text-center">
-              <button class="btn btn-outline-success btn-sm ms-2" (click)="deleteTypesConges(type.idTypeConge)">
+              <button class="btn btn-outline-success btn-sm ms-2" (click)="openDeleteModal(type.idTypeConge)">
                 <i class="bi bi-trash"></i> 
               </button>
             </td>
@@ -47,3 +56,16 @@
     </div>
   </div>
   
+  <ng-template #deleteModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Confirmer la suppression</h4>
+      <button type="button" class="close" (click)="modal.dismiss('Cross click')" style="margin-left: 150px;">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>Êtes-vous sûr de vouloir supprimer ce Type Congé ?</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Close click')">Annuler</button>
+      <button type="button" class="btn btn-success" (click)="deleteTypesConges(selectedId, modal)">Supprimer</button>
+    </div>
+  </ng-template>

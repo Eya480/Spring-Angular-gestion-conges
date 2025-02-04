@@ -30,12 +30,6 @@
           </li>
         }
 
-        @if(isAuthenticated) {
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/profile">Profil</a>
-          </li>
-        }
-
         @if(isAuthenticated && isAdminRH) {
           <li class="nav-item">
             <a class="nav-link" routerLink="/adminRH">Dashboard</a>
@@ -46,6 +40,9 @@
           <li class="nav-item">
             <a class="nav-link" routerLink="/adminRH/employees">Employés</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/adminRH/hitoriqueConges">Historique Demandes Congés</a>
+          </li>
         }
 
         @if(isAuthenticated && isManager){
@@ -55,18 +52,49 @@
           <li class="nav-item">
             <a class="nav-link" routerLink="/manager/historiqueDemandesEquipe">Historique Demandes Congés</a>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-bell"></i>
+              <span *ngIf="unreadCount > 0" class="badge bg-danger position-absolute top-0 start-100 translate-middle">{{ unreadCount }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li *ngIf="notifications.length === 0"><a class="dropdown-item">Aucune notification</a></li>
+              <li *ngFor="let notif of notifications">
+                  {{ notif.message }}
+                  <span *ngIf="!notif.read" class="badge bg-danger">Nouveau Soumission</span>
+              </li>
+            </ul>
+          </li>
           <li class="nav-item">
             <a class="nav-link" routerLink="/manager/demandeEnAttente">Demandes En Attente</a>
           </li>
+           <!-- Bouton Notifications -->
+          
         }
 
         @if(isAuthenticated && isUser) {
           <li class="nav-item">
             <a class="nav-link" routerLink="/employee">Dashboard</a>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-bell"></i>
+              <span *ngIf="unreadCount > 0" class="badge bg-danger position-absolute top-0 start-100 translate-middle">{{ unreadCount }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li *ngIf="notifications.length === 0"><a class="dropdown-item">Aucune notification</a></li>
+              <li *ngFor="let notif of notifications">
+                  {{ notif.message }}
+                  <span *ngIf="!notif.read" class="badge bg-danger">Nouveau Validation , go and check !</span>
+              </li>
+            </ul>
+          </li>
           <li class="nav-item">
             <a class="nav-link" routerLink="/employee/demandeConges">Demande Congés</a>
           </li>
+              <!-- Bouton Notifications -->
+              
+      
         }
 
         @if(isAuthenticated && isAdmin){
@@ -74,7 +102,15 @@
             <a class="nav-link" routerLink="/admin">Dashboard</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" routerLink="/admin/users">Utilisateurs</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" routerLink="/admin/departement">Département</a>
+          </li>
+        }
+        @if(isAuthenticated) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/profile">Profil</a>
           </li>
         }
       </ul>

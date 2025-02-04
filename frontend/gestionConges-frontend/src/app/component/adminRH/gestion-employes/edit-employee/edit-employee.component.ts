@@ -14,7 +14,6 @@ import { ServiceService } from '../../../shared/service.service';
 export class EditEmployeeComponent implements OnInit {
   employee: any = {}; // Utilisation du modèle Employee
   errorMessage: string = '';
-  maxValue : number = 0;
   departements: string[] = []; // List of available departments
   postes: string[] = [
     'Développeur Frontend',
@@ -28,12 +27,11 @@ export class EditEmployeeComponent implements OnInit {
     'Architecte logiciel',
     'Data Scientist',
   ];
-  roles: string[] = [];
   token = localStorage.getItem('token'); 
 
   constructor(
     private activeRoute: ActivatedRoute,
-    private employeeService: AdminRHServiceService, // Service Employee
+    private employeeService: AdminRHServiceService,
     private sharedService : ServiceService,
     private router: Router,
   ) {}
@@ -66,15 +64,11 @@ export class EditEmployeeComponent implements OnInit {
             this.errorMessage = 'Une erreur est survenue lors de la mise à jour de l’employé.';
           }
         });
-    } else {
-      this.errorMessage = 'Veuillez remplir tous les champs obligatoires.';
-    }
+    } 
   }}
 
   // Récupérer l'employé à éditer lors de l'initialisation
   ngOnInit(): void {
-    this.roles=['User','AdminRH','Manager']
-    
     this.sharedService.getAllDepartements().subscribe({
       next: (data) => {
         this.departements = data.map(departement => departement.nomDep); // Just get names
@@ -90,7 +84,6 @@ export class EditEmployeeComponent implements OnInit {
         if (id && this.token) {
           this.employeeService.getEmployeeById(id, this.token).subscribe({
             next: (employeeData) => {
-              this.maxValue = this.employee.soldeInitial;
               this.employee = employeeData; // Assigner les données de l'employé
             },
             error: (error) => {

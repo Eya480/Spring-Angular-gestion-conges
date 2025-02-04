@@ -31,8 +31,8 @@ public class DepartementService {
     }
 
     public Manager getManagerByDepartement(Integer id){
-        Departement departement=departementRepo.findById(id).orElseThrow(()->new RuntimeException("Manager non trouvé avec l'ID : \" + id"));
-        return departement.getManager();
+            Departement departement=departementRepo.findById(id).orElseThrow(()->new RuntimeException("departement non trouvé avec ce ID"));
+            return departement.getManager();
     }
 
 }

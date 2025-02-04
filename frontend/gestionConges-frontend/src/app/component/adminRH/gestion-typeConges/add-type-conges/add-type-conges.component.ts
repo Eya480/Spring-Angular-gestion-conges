@@ -22,6 +22,7 @@ export class AddTypeCongesComponent {
         this.AddTypeCForm = this.fb.group({
           nomTypeConge: [''],
           descriptionC: [''],
+          nbCongeMax:[''],
           affecteSoldeConge : ['false']
         });
       }

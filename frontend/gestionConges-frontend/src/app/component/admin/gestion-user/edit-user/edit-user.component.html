@@ -1,0 +1,213 @@
+<div class="container py-5 h-50">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-xl-10">
+            <div class="card shadow-lg" style="border-radius: 1rem; backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.8);">
+                <div class="row g-0">
+                    <!-- Image Section -->
+                    <div class="col-md-6 col-lg-5 d-none d-md-block">
+                        <img src="/assets/photo.jpg"
+                            alt="Formulaire d'édition" 
+                            class="img-fluid" 
+                            style="height: 100%;filter: blur(1px) brightness(0.7) contrast(1.2) saturate(2);" />
+                    </div>
+                    <!-- Form Section -->
+                    <div class="col-md-7">
+                        <div class="card-body p-5 d-flex flex-column justify-content-center">
+                            <h2 class="text-center fw-bold mb-4">Editer l'Utilisateur <br> <u><span class="text-success">{{user.nom}}</span></u></h2>
+
+                            <form id="EditForm" (ngSubmit)="editUser(f)" #f="ngForm">
+                                <!-- Nom Input -->
+                                <div class="form-floating mb-3">
+                                    <input 
+                                      type="text" 
+                                      name="nom"
+                                      id="nomInput" 
+                                      ngModel #nom="ngModel" 
+                                      class="form-control" 
+                                      placeholder="Nom" 
+                                      [(ngModel)]="user.nom"
+                                      required
+                                    >
+                                    <label for="nomInput">*Nom</label>
+                                    @if(nom.touched && nom.invalid){
+                                        <span class="error">Ce champ est obligatoire!</span>
+                                    }
+                                </div>
+
+                                <!-- Prénom Input -->
+                                <div class="form-floating mb-3">
+                                    <input 
+                                      type="text" 
+                                      id="prenomInput"
+                                      name="prenom" 
+                                      ngModel #prenom="ngModel"
+                                      [(ngModel)]="user.prenom"
+                                      class="form-control" 
+                                      placeholder="Prénom" 
+                                      required
+                                    >
+                                    <label for="prenomInput">*Prénom</label>
+                                    @if(prenom.touched && prenom.invalid){
+                                        <span class="error">Ce champ est obligatoire!</span>
+                                    }
+                                </div>
+
+                                <!-- Email Input -->
+                                <div class="form-floating mb-3">
+                                    <input 
+                                      type="email" 
+                                      id="emailInput" 
+                                      name="email"
+                                      ngModel #email="ngModel"
+                                      [(ngModel)]="user.email"
+                                      class="form-control" 
+                                      placeholder="Adresse e-mail" 
+                                      required
+                                    >
+                                    <label for="emailInput">*Adresse e-mail</label>
+                                    @if(email.touched && email.invalid){
+                                        <span class="error">Email invalide</span>
+                                    }
+                                </div>
+
+                                 <!-- tel Input -->
+                                 <div class="form-floating mb-3">
+                                    <input 
+                                      type="tel" 
+                                      id="tel" 
+                                      name="tel"
+                                      ngModel #tel="ngModel"
+                                      [(ngModel)]="user.tel"
+                                      class="form-control" 
+                                      placeholder="Numéro de Téléphone" 
+                                      required
+                                    >
+                                    <label for="Numéro de Téléphone">*Numéro de Téléphone</label>
+                                    @if(tel.touched && tel.invalid){
+                                        <span class="error">Numéro de Telph invalide</span>
+                                    }
+                                </div>
+
+                                <!-- CIN Input -->
+                                 @if(user.cin){
+                                <div class="form-floating mb-3">
+                                    <input 
+                                      type="text" 
+                                      id="cinInput" 
+                                      name="cin"
+                                      ngModel #cin="ngModel"
+                                      [(ngModel)]="user.cin"
+                                      class="form-control" 
+                                      placeholder="Numéro CIN" 
+                                      required
+                                    >
+                                    <label for="cinInput">*Numéro CIN</label>
+                                    @if(cin.touched && cin.invalid){
+                                        <span class="error">Ce champ est obligatoire!</span>
+                                    }
+                                </div>}
+
+
+                                @if(role=='User' || role=='Manager'){
+                                <!-- Département Select -->
+                                <div class="form-floating mb-3">
+                                    <select 
+                                      id="departementInput" 
+                                      name="departement"
+                                      ngModel
+                                      #departement="ngModel"
+                                      [(ngModel)]="user.departement.nomDep"
+                                      (change)="role=='Manager'?istheDepHasManager($event, managerExistsModal):null"
+                                      class="form-control" 
+                                      required
+                                    >
+                                      <option value="" disabled selected>Choisir un département</option>
+                                      <!-- Boucle sur les départements et affichage -->
+                                      @for(dep of departements; track dep){
+                                          <option [value]="dep.nomDep">{{ dep.nomDep }}</option>
+                                      }
+                                    </select>
+                                    <!--Template du modal-->
+                                    <ng-template #managerExistsModal let-modal>
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Information</h4>
+                                            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Ce département a déja un manager.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" (click)="modal.close()">Fermer</button>
+                                        </div>
+  
+                                     </ng-template>
+                                    <label for="posteInput">*Département</label>
+                                </div>
+                    
+                                @if(role!='Manager'){
+                                <!-- Poste Select -->
+                                <div class="form-floating mb-3">
+                                    <select 
+                                      id="posteInput" 
+                                      name="poste"
+                                      ngModel
+                                      #poste="ngModel"
+                                      [(ngModel)]="user.poste"  
+                                      class="form-control" 
+                                      required
+                                    >
+                                      <option value="" disabled selected>Choisir un poste</option>
+                                      <option [value]="user.poste" selected>
+                                        {{ user.poste }}
+                                      </option>
+                                      @for(poste of postes;track poste){
+                                          <option [value]="poste">
+                                              {{ poste }}
+                                          </option>
+                                      }
+                                    </select>
+                                    <label for="posteInput">*Poste</label>
+                                </div>
+
+                                <!-- Date d'embauche Input -->
+                                <div class="form-floating mb-3">
+                                    <input 
+                                      type="date" 
+                                      id="dateEmbaucheInput" 
+                                      name="dateEmbauche"
+                                      ngModel #dateEmbauche="ngModel"
+                                      [(ngModel)]="user.dateEmbauche"
+                                      class="form-control" 
+                                      placeholder="Date d'embauche" 
+                                      required
+                                    >
+                                    <label for="dateEmbaucheInput">*Date d'embauche</label>
+                                    @if(dateEmbauche.touched && dateEmbauche.invalid){
+                                        <span class="error">Ce champ est obligatoire!</span>
+                                    }
+                                </div>
+                            }
+                                  
+                            }
+
+                                <!-- Error Message -->
+                                @if (errorMessage){
+                                <div class="alert alert-danger mt-3" [innerHTML]="errorMessage">
+                                    {{ errorMessage }}
+                                </div>
+                                }
+
+                                <!-- Save Button -->
+                                <div class="d-grid mb-4">
+                                    <button type="submit" class="btn btn-success btn-lg" [disabled]="f.invalid">
+                                        Sauvegarder
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

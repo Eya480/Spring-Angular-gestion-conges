@@ -1,16 +1,13 @@
 package com.gestionConges.backend.gestionConges.controller;
 
 import com.gestionConges.backend.gestionConges.model.DemandeConge;
-import com.gestionConges.backend.gestionConges.model.Departement;
 import com.gestionConges.backend.gestionConges.model.Employe;
 import com.gestionConges.backend.gestionConges.model.Manager;
 import com.gestionConges.backend.gestionConges.repository.DemandeCongeRepo;
 import com.gestionConges.backend.gestionConges.repository.ManagerRepo;
-import com.gestionConges.backend.gestionConges.repository.PersonnelRepo;
 import com.gestionConges.backend.gestionConges.service.DemandeCongeService;
 import com.gestionConges.backend.gestionConges.service.EmployeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -75,7 +72,6 @@ public class ManagerController {
         if(demandeConge.getTypeConge().getAffecteSoldeConge()){
             demandeCongeService.approuveDemandeSolde(demandeConge);
             return ResponseEntity.ok(Map.of("message","Demande de congé approuvée avec succès."));
-
         }else{
             demandeCongeService.approuveDemande(demandeConge);
             return ResponseEntity.ok(Map.of("message","Demande de congé approuvée avec succès."));

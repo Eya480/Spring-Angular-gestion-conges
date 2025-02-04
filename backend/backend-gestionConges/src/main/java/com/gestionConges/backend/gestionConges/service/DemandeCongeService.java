@@ -1,13 +1,12 @@
 package com.gestionConges.backend.gestionConges.service;
 
 import com.gestionConges.backend.gestionConges.model.*;
-import com.gestionConges.backend.gestionConges.repository.DemandeCongeRepo;
-import com.gestionConges.backend.gestionConges.repository.EmployeeRepo;
-import com.gestionConges.backend.gestionConges.repository.TypeCongeRepo;
+import com.gestionConges.backend.gestionConges.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +16,12 @@ public class DemandeCongeService {
 
     @Autowired
     private DemandeCongeRepo demandeCongeRepo;
+
+    @Autowired
+    private NotifRepo notifRepo;
+
+    @Autowired
+    private ManagerRepo managerRepo;
 
     @Autowired
     private EmployeeRepo employeeRepo;
@@ -43,7 +48,17 @@ public class DemandeCongeService {
         demandeConge.setStatut(EtatDemande.En_Attente);
 
         employe.getLesDemandeConges().add(demandeConge);
+
+        Notification notification= new Notification();
+        notification.setDateEnvoi(LocalDateTime.now());
+        notification.setDestinataire(demandeConge.getManager());
+        notification.setContenu(employe.getNom()+" a Soumit une demande Le :"+LocalDate.now()+", avec la raison de : "+demandeConge.getReason());
+
+
+        notifRepo.save(notification);
         demandeCongeRepo.save(demandeConge);
+
+
 
     }
 
@@ -76,6 +91,8 @@ public class DemandeCongeService {
         demandeConge.setDateDebut(newDemandeC.getDateDebut());
         demandeConge.setDateFin(newDemandeC.getDateFin());
 
+
+
         demandeCongeRepo.save(demandeConge);
     }
 
@@ -103,7 +120,12 @@ public class DemandeCongeService {
         demandeConge.setEstDExtension(true);
         demandeConge.setDateFin(nouvelleDateFin);
         if (newReason!=""){demandeConge.setReason(newReason);}
+
         demandeCongeRepo.save(demandeConge);
+    }
+
+    public List<DemandeConge> getAllByManager(Integer id){
+        return demandeCongeRepo.findByManager(managerRepo.findById(id).orElse(null));
     }
 
     //Manager
@@ -116,24 +138,47 @@ public class DemandeCongeService {
         demandeConge.setStatut(EtatDemande.Approuve);
         //mettre a jour le cumule
         demandeConge.getEmploye().setsoldeCumule();
-
+        demandeConge.setEstDExtension(false);
         demandeConge.getEmploye().setSoldeConsommes((int)(ChronoUnit.DAYS.between(demandeConge.getDateDebut(), demandeConge.getDateFin()) + 1));
         demandeConge.getEmploye().setSoldeRestant(demandeConge.getEmploye().getSoldeRestant()-demandeConge.getEmploye().getSoldeConsommes());
 
+        Notification notification= new Notification();
+        notification.setDateEnvoi(LocalDateTime.now());
+        notification.setDestinataire(demandeConge.getEmploye());
+        notification.setContenu("Le Manager de Votre Département a Validé Votre Demande de Congé, GO AND CHECK !");
+
+        notifRepo.save(notification);
+
         demandeCongeRepo.save(demandeConge);
+
         employeeRepo.save(demandeConge.getEmploye());
     }
 
     public void approuveDemande(DemandeConge demandeConge){
         demandeConge.setStatut(EtatDemande.Approuve);
+        demandeConge.setEstDExtension(false);
+
+        Notification notification= new Notification();
+        notification.setDateEnvoi(LocalDateTime.now());
+        notification.setDestinataire(demandeConge.getEmploye());
+        notification.setContenu("Le Manager de Votre Département a Validé Votre Demande de Congé, GO AND CHECK !");
+
+        notifRepo.save(notification);
 
         demandeCongeRepo.save(demandeConge);
     }
 
     public void refuseDemande(Integer id){
         DemandeConge demandeConge=demandeCongeRepo.findById(id).get();
-
+        demandeConge.setEstDExtension(false);
         demandeConge.setStatut(EtatDemande.Refuse);
+
+        Notification notification= new Notification();
+        notification.setDateEnvoi(LocalDateTime.now());
+        notification.setDestinataire(demandeConge.getEmploye());
+        notification.setContenu("Le Manager de Votre Département a Réfusé Votre Demande de Congé, GO AND CHECK !");
+
+        notifRepo.save(notification);
 
         demandeCongeRepo.save(demandeConge);
 

@@ -12,6 +12,7 @@ public class TypeConge {
     private Integer idTypeConge;
     private String nomTypeConge;
     private String descriptionC;
+    private int nbCongeMax;
     private Boolean affecteSoldeConge;
 
     @ManyToOne
@@ -25,6 +26,14 @@ public class TypeConge {
 
     public void setConsommeSoldee(Boolean consommeSolde) {
         this.affecteSoldeConge = consommeSolde;
+    }
+
+    public int getnbCongeMax() {
+        return this.nbCongeMax;
+    }
+
+    public void setnbCongeMax(int nbCongeMax) {
+        this.nbCongeMax = nbCongeMax;
     }
 
     public Integer getIdTypeConge() {

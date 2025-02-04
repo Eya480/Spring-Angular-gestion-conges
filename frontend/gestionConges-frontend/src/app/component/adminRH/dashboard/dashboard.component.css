@@ -36,4 +36,15 @@
   th{
  background-color: rgb(192, 233, 205);
   }
+
   
+  
+  .custom-card-header {
+    background: #f1f1f1;
+    border-radius: 10px 10px 0 0;
+    padding: 12px 20px;
+    font-weight: bold;
+}
+ .bg-success {
+    background-color: #47a186 !important; /* Vert pastel doux */
+  }

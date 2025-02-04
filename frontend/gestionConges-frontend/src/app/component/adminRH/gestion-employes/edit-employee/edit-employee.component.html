@@ -88,6 +88,23 @@
                                         <span class="error">Ce champ est obligatoire!</span>
                                     }
                                 </div>}
+                                  <!-- tel Input -->
+                                  <div class="form-floating mb-3">
+                                    <input 
+                                      type="tel" 
+                                      id="tel" 
+                                      name="tel"
+                                      ngModel #tel="ngModel"
+                                      [(ngModel)]="employee.tel"
+                                      class="form-control" 
+                                      placeholder="Numéro de Téléphone" 
+                                      required
+                                    >
+                                    <label for="Numéro de Téléphone">*Numéro de Téléphone</label>
+                                    @if(tel.touched && tel.invalid){
+                                        <span class="error">Numéro de Telph invalide</span>
+                                    }
+                                </div>
 
                                 <!-- Département Select -->
                                 @if(employee.departement){

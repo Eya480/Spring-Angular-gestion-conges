@@ -1,29 +1,45 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AdminRHServiceService } from '../../service/admin-rhservice.service';
 import { CommonModule } from '@angular/common';
 import { ServiceService } from '../../../shared/service.service';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-list-employee',
-  imports: [RouterModule, CommonModule, FormsModule],
+  imports: [RouterModule, CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './list-employee.component.html',
   styleUrls: ['./list-employee.component.css'],
 })
 export class ListEmployeeComponent implements OnInit {
   employees?: any[]; // Liste filtrée
   originalEmployees?: any[]; // Liste complète
-  dep: string = 'all'; 
-  departements: string[] = []; 
+  departements?: string[] = []; 
+  employeeForm: FormGroup;
   token = localStorage.getItem('token'); 
+  selectedId?: string;
 
   constructor(
     private adminRhService: AdminRHServiceService,
     private router: Router,
-    private sharedService: ServiceService
-  ) {}
+    private sharedService: ServiceService,
+    private fb: FormBuilder,
+    private modalService: NgbModal
+  ) {
+    this.employeeForm = this.fb.group({
+      departement: [''],
+    });
+  }
 
+  @ViewChild('deleteModal') deleteModal!: TemplateRef<any>;
+
+  openDeleteModal(id: string): void {
+    this.selectedId = id;
+    this.modalService.open(this.deleteModal, { ariaLabelledBy: 'modal-basic-title' });
+  }
+
+   
   ngOnInit(): void {
     // Charger les départements
     this.sharedService.getAllDepartements().subscribe({
@@ -33,12 +49,25 @@ export class ListEmployeeComponent implements OnInit {
       error: () => console.error('Erreur lors du chargement des départements.'),
     });
 
+    // Lorsque le département change, filtrer les employés
+    this.employeeForm.get('departement')?.valueChanges.subscribe(value => {
+      this.filterByDep(value);
+    });
+
     // Charger les employés si le token est valide
     if (this.token) {
       this.loadEmployees();
     } else {
       console.error('Token introuvable dans le localStorage');
       this.router.navigate(['/login']);
+    }
+  }
+
+  filterByDep(dep: string): void {
+    if (dep) {
+      this.employees = this.originalEmployees?.filter(e => e.departement.nomDep === dep);
+    } else {
+      this.employees = [...this.originalEmployees!]; // Réinitialiser si aucun département n'est sélectionné
     }
   }
 
@@ -54,37 +83,19 @@ export class ListEmployeeComponent implements OnInit {
   }
 
   // Supprimer un employé
-  deleteEmployee(id: string | undefined): void {
+  deleteEmployee(id: string | undefined, modal:any): void {
     if (id) {
-      if (confirm('Êtes-vous sûr de vouloir supprimer cet employé ?')) {
         this.adminRhService.deleteEmployee(id, this.token!).subscribe({
           next: (data) => {
-            console.log(data)
-            this.employees = this.employees?.filter((c) => c.id !== id); // Retirer l'employé supprimé
+            console.log(data);
+            this.employees = this.employees?.filter((c) => c.id !== id); 
+            modal.close('Close click');
           },
           error: (error) =>
-            console.error("Erreur lors de la suppression de l'employé", error),
+            console.error('Erreur lors de la suppression de l\'employé', error),
         });
-      }
     } else {
-      console.error("ID de l'employé est undefined");
+      console.error('ID de l\'employé est undefined');
     }
-  }
-
-  // Filtrer par département
-  filter(): void {
-    if (this.dep !== 'all') {
-      this.employees = this.originalEmployees?.filter(
-        (e) => e.departement.nomDep === this.dep
-      );
-    } else {
-      this.resetFilter();
-    }
-  }
-
-  // Réinitialiser les filtres
-  resetFilter(): void {
-    this.employees = [...(this.originalEmployees || [])]; // Restaurer la liste originale
-    this.dep = 'all'; // Réinitialiser la sélection
   }
 }

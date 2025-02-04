@@ -1,0 +1,159 @@
+<div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-xl-10">
+        <div class="card shadow-lg" style="border-radius: 1rem; backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.8);">
+          <div class="row g-0">
+            <!-- Image Section -->
+            <div class="col-md-6 col-lg-5 d-none d-md-block">
+              <img src="/assets/ajouter.jpg"
+                   alt="Formulaire d'employé"
+                   class="img-fluid"
+                   style="height: 100%;" />
+            </div>
+  
+            <!-- Form Section -->
+            <div class="col-md-7">
+              <div class="card-body p-5 d-flex flex-column justify-content-center">
+                <h2 class="text-center fw-bold mb-4">Ajouter un {{selectedRole}}</h2>
+  
+                <form [formGroup]="addUser" (ngSubmit)="onSubmit()">
+                  <!-- CIN -->
+                  <div class="form-floating mb-3">
+                    <input type="text" id="cinInput" formControlName="cin" class="form-control" placeholder="CIN" required>
+                    <label for="cinInput">CIN</label>
+                    @if(addUser.controls['cin'].touched && addUser.controls['cin'].invalid){
+                      <span class="error">Ce champ est obligatoire!</span>
+                    }
+                  </div>
+  
+                  <!-- Nom -->
+                  <div class="form-floating mb-3">
+                    <input type="text" id="nomInput" formControlName="nom" class="form-control" placeholder="Nom" required>
+                    <label for="nomInput">*Nom</label>
+                    @if(addUser.controls['nom'].touched && addUser.controls['nom'].invalid){
+                      <span class="error">Ce champ est obligatoire!</span>
+                    }
+                  </div>
+  
+                  <!-- Prénom -->
+                  <div class="form-floating mb-3">
+                    <input type="text" id="prenomInput" formControlName="prenom" class="form-control" placeholder="Prénom" required>
+                    <label for="prenomInput">*Prénom</label>
+                    @if(addUser.controls['prenom'].touched && addUser.controls['prenom'].invalid){
+                      <span class="error">Ce champ est obligatoire!</span>
+                    }
+                  </div>
+  
+                  <!-- Téléphone -->
+                  <div class="form-floating mb-3">
+                    <input type="tel" id="telInput" formControlName="tel" class="form-control" placeholder="Téléphone" required>
+                    <label for="telInput">*Téléphone</label>
+                    @if(addUser.controls['tel'].touched && addUser.controls['tel'].invalid){
+                      <span class="error">Ce champ est obligatoire!</span>
+                    }
+                  </div>
+  
+                  <!-- Email -->
+                  <div class="form-floating mb-3">
+                    <input type="email" id="emailInput" formControlName="email" class="form-control" placeholder="Email" required>
+                    <label for="emailInput">*Email</label>
+                    @if(addUser.controls['email'].touched && addUser.controls['email'].invalid){
+                      <span class="error">Ce champ est obligatoire!</span>
+                    }
+                  </div>
+  
+                  <!-- Mot de passe -->
+                  <div class="form-floating mb-3">
+                    <input type="password" id="pwdInput" formControlName="pwd" class="form-control" placeholder="Mot de Passe" required>
+                    <label for="pwdInput">*Mot de Passe</label>
+                    @if(addUser.controls['pwd'].touched && addUser.controls['pwd'].invalid){
+                      <span class="error">Ce champ est obligatoire!</span>
+                    }
+                  </div>
+  
+                @if(addUser.get('role')?.value=='Manager' || addUser.get('role')?.value=='User' ){
+                  <!-- Department Input -->
+                  <div class="form-floating mb-3">
+                    <select
+                      id="departementSelect"
+                      formControlName="nomDep"
+                      class="form-select"
+                      required
+                      (change)="addUser.get('role')?.value=='Manager'?istheDepHasManager($event, managerExistsModal):null"
+                    >
+                      <option value="" disabled selected>Choisir un département</option>
+                      @for(dep of departements;track dep){
+                      <option [value]="dep.nomDep">{{ dep.nomDep }}</option>
+                      }
+                    </select>
+                    <!--Template du modal-->
+                    <ng-template #managerExistsModal let-modal>
+                      <div class="modal-header">
+                        <h4 class="modal-title">Information</h4>
+                        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+                      </div>
+                      <div class="modal-body">
+                        <p>Ce département a déja un manager.</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="modal.close()">Fermer</button>
+                      </div>
+
+                    </ng-template>
+                    <label for="departementSelect">*Département</label>                  
+                </div>
+            }@if(addUser.get('role')?.value=='User'){
+
+                <div class="form-floating mb-3">
+                    <select
+                    id="posteSelect"
+                    formControlName="poste"
+                     class="form-select"
+                       required
+                           >
+                           <option value="" disabled selected>Choisir une POSTE</option>
+                         <!-- Liste statique des postes -->
+                          @for(poste of postes;track poste){
+                       <option [value]="poste">{{ poste }}</option>}
+                         </select>
+                         <label for="posteSelect">*Poste</label>
+                       </div>
+                <!-- *********Employé :Date Embauche Input -->
+                <div class="form-floating mb-3">
+                    <input 
+                        type="date" 
+                        id="dateEmbaucheInput" 
+                        formControlName="dateEmbauche" 
+                        class="form-control" 
+                        placeholder="Date Embauche" 
+                        required
+                    >
+                    <label for="dateEmbaucheInput">*Date Embauche</label>
+                    @if(addUser.controls['dateEmbauche'].touched && addUser.controls['dateEmbauche'].invalid){
+                        <span class="error">Ce champ est obligatoire!</span>
+                    }
+                </div>
+            }
+                <input type="text" name="" id="" formControlName="role" style="display: none;">              
+  
+                  <!-- Error Message -->
+                  @if(errorMessage){
+                  <div class="alert alert-danger mt-3">
+                    {{ errorMessage }}
+                  </div>}
+  
+                  <!-- Submit Button -->
+                  <div class="d-grid mb-4">
+                    <button type="submit" class="btn btn-primary btn-lg" [disabled]="addUser.invalid">
+                      Ajouter
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

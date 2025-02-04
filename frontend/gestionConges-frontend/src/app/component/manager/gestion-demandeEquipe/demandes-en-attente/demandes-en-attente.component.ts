@@ -1,27 +1,44 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ManagerServiceService } from '../../service/manager-service.service';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { forkJoin, map } from 'rxjs';
+import { AdminRHServiceService } from '../../../adminRH/service/admin-rhservice.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
   selector: 'app-demandes-en-attente',
-  imports: [RouterModule, CommonModule, FormsModule],
+  imports: [RouterModule, CommonModule, FormsModule,ReactiveFormsModule],
   templateUrl: './demandes-en-attente.component.html',
   styleUrl: './demandes-en-attente.component.css'
 })
 export class DemandesEnAttenteComponent implements OnInit{
-  postes:string[]=[];
-  poste: string = 'all';
-  LesDemandes? : any[];
-  nbJours? : number;
-  originalList?: any[];
-  errorMessage: string = '';
+  postes: string[] = [];
+  LesDemandes?: any[] = [];
+  originalList: any[] = [];
+  posteForm: FormGroup;
   token = localStorage.getItem('token'); 
+  selectedIdR?: string;
+  selectedIdA?: string;
 
-  constructor(private managerService: ManagerServiceService){}
+      
+  @ViewChild('ApprouveModal') ApprouveModal!: TemplateRef<any>;
+  @ViewChild('RefuseModal') RefuseModal!: TemplateRef<any>;
+
+
+  constructor(private managerService: ManagerServiceService,private fb: FormBuilder, private adminRhService: AdminRHServiceService, private modelService:NgbModal) {
+      this.posteForm = this.fb.group({
+        poste: [''],
+      });
+    }
+  toggleRaison(id: number) {
+    const demande = this.LesDemandes?.find(d => d.idDemande === id);
+    if (demande) {
+      demande.showRaison = !demande.showRaison;
+    }
+  }
 
   ngOnInit(): void {
     this.postes = [
@@ -69,16 +86,30 @@ export class DemandesEnAttenteComponent implements OnInit{
       },
     });
   }
+  // Subscribe to form value changes for filtering
+  this.posteForm?.get('poste')?.valueChanges.subscribe(value => {
+    this.filterByPoste(value);
+  });
+}
+
+filterByPoste(poste: string): void {
+  if (poste) {
+    // Filter the requests based on the selected poste
+    this.LesDemandes = this.originalList.filter(d => d.employe.poste === poste);
+  } else {
+    // If no poste is selected, display all requests
+    this.LesDemandes = [...this.originalList];
+  }
 }
 
   //validation
-  approuverDemande(id: string): void {
+  approuverDemande(id: string, model:any): void {
     if (id && this.token) {
       this.managerService.approuverDemande(id,this.token).subscribe({
-        next: (data) => {
+        next: () => {
           // Filtrer les demandes pour ne garder que celles en attente
-          this.LesDemandes = this.LesDemandes?.filter((d)=>d.statut === 'En_Attente');
-          //console.log(data.message);
+          this.LesDemandes = this.LesDemandes?.filter((d)=>d.idDemande != id);
+          model.close('Close click')
         },
         error: (err) => {
           console.error('Erreur lors de l\'approbation de la demande :', err);
@@ -89,13 +120,13 @@ export class DemandesEnAttenteComponent implements OnInit{
     }
 }
 
-refuserDemande(id: string): void {
+refuserDemande(id: string, model:any): void {
     if (id && this.token) {
       this.managerService.refuserDemande(id,this.token).subscribe({
         next: (data) => {
           // Filtrer les demandes pour ne garder que celles en attente
-          this.LesDemandes = this.LesDemandes?.filter((d)=>d.statut === 'En_Attente');
-          console.log(data.message);
+          this.LesDemandes = this.LesDemandes?.filter((d)=>d.idDemande != id);
+          model.close('Close click')
         },
         error: (err) => {
           console.error('Erreur lors du refus de la demande :', err);
@@ -105,25 +136,18 @@ refuserDemande(id: string): void {
       console.error('Aucun ID ou token valide trouvé pour refuser la demande.');
     }
 }
-
+  openApprouveModal(id: string): void {
+    this.selectedIdA = id;
+    this.modelService.open(this.ApprouveModal, { ariaLabelledBy: 'modal-basic-title' });
+} 
+    
+  openRefuseModal(id: string): void {
+  this.selectedIdR = id;
+  this.modelService.open(this.RefuseModal, { ariaLabelledBy: 'modal-basic-title' });
+}
   
 
-  // Filtrer par département
-  filter(): void {
-    if (this.poste !== 'all') {
-      this.LesDemandes = this.originalList?.filter(
-        (d) => d.employe.poste === this.poste
-      );
-    } else {
-      this.resetFilter();
-    }
-  }
-
-  // Réinitialiser les filtres
-  resetFilter(): void {
-    this.LesDemandes = [...(this.originalList || [])]; // Restaurer la liste originale
-    this.poste = 'all'; // Réinitialiser la sélection
-  }
+  
 
   calculateDays(dateDebut: string, dateFin: string): number {
     const debut = new Date(dateDebut);
@@ -132,14 +156,6 @@ refuserDemande(id: string): void {
     const timeDiff = fin.getTime() - debut.getTime();
     return Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1; // Ajoutez 1 pour inclure le jour de début et de fin
   }
-
-  showError(mess: string) {
-    this.errorMessage = mess;
-    setTimeout(() => {
-      this.errorMessage = ''
-    }, 3000)
-  }
-  
   
 
 }

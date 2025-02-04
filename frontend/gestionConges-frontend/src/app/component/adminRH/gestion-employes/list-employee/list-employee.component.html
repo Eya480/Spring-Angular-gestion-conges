@@ -1,78 +1,97 @@
-<div class="container mt-5">
-  <div class="d-flex">
-    <!-- Partie gauche : Titre, bouton Ajouter, et filtre -->
-    <div class="flex-shrink-0 me-4" style="width: 250px;border-right: 1px solid gray; padding: 10px;">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <div class="d-flex">
-          <h2 class="">Filter</h2>
-      </div>
-      </div>
-
-      <!-- Filtre de département -->
-      <div class="mb-4">
-        <label for="filter" class="mb-2 mb-md-3">Filter par département</label>
-        <select class="form-select" [(ngModel)]="dep">
-          <option value="all">Tous les départements</option>
-          @for (department of departements; track department) {
-            <option [ngValue]="department">{{ department }}</option>
-          }
-        </select>
-        <!-- Filter Button -->
-        <div class="d-flex justify-content-end justify-content-lg-start">
-          <button class="btn btn-success mt-3 mt-md-4" type="button" (click)="filter()">Filter</button>
-          <button class="btn btn-outline-success mt-3 mt-md-4 ms-3" type="button" (click)="resetFilter()">Reset</button>    
-      </div>
+<form [formGroup]="employeeForm">
+  <div class="container mt-5">
+    <div class="row mb-5 align-items-center">
+      <!-- Titre -->
+      <div class="col-12 col-md-6">
+        <h2 class="text-dark fw-bold">👥 Liste des Employés</h2>
+        <p class="text-muted" style="margin-bottom: 0px;">Consultez la liste des employés avec les filtres disponibles</p>
       </div>
     </div>
 
-    <!-- Partie droite : Liste des employés -->
-    <div class="flex-grow-1">
-      <div class="d-flex align-items-center">
-        <h3 class="text-black fw-bold me-3">Liste des Employés</h3>
-        <a class="btn shadow-sm text-white d-flex align-items-center" [routerLink]="'../addEmployee'"
-           style="background-color: rgb(29, 138, 29); border-radius: 25px; padding: 8px 20px; font-size: 14px; transition: all 0.3s ease;">
-          Ajouter un(e) employé(e)
-        </a>
-      </div><br><br>
-      <div class="row">
-        @for (employee of employees; track employee) {
-          <div class="col-md-4 mb-4 d-flex"> <!-- Changement de col-md-3 à col-md-6 pour 2 cartes par ligne -->
-            <div class="card employee-card w-100 h-100" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px;">
-              <div class="card-body text-center position-relative p-3 d-flex flex-column">
-                <!-- Boutons en haut à droite -->
-                <div class="position-absolute top-0 end-0 mt-1 me-1">
-                  <a class="btn btn-success btn-sm" [routerLink]="['../','editEmployee', employee.id]">
-                    <i class="bi bi-pencil-square"></i>
-                  </a>
-                  <button class="btn btn-warning btn-sm ms-1" (click)="deleteEmployee(employee.id)">
-                    <i class="bi bi-trash"></i>
-                  </button>
-                </div>
+    <div class="d-flex">
+      <!-- Sidebar: Filter Section -->
+      <div class="flex-shrink-0 me-4" style="width: 250px; border-right: 1px solid gray; padding: 10px;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2>Filter</h2>
+        </div>
 
-                <!-- Photo de profil circulaire -->
-                <img src="https://picsum.photos/100/100/?{{employee.id}}" alt="Photo de profil" class="rounded-circle mb-2 mx-auto" style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #ddd;">
+        <!-- Filter by Department -->
+        <div class="mb-4">
+          <label for="filter" class="mb-2 mb-md-3">Filtrer par Département</label>
+          <select formControlName="departement" class="form-select border-black">
+            <option value="">Tous les départements</option>
+            <option *ngFor="let dep of departements" [value]="dep">{{ dep }}</option>
+          </select>
+        </div>
+</div>
+      <!-- Main Content: Employee List -->
+      <div class="flex-grow-1">
+        <div class="d-flex align-items-center">
+          <h3 class="text-black fw-bold me-3">Liste des Employés</h3>
+          <a class="btn shadow-sm text-white d-flex align-items-center" [routerLink]="'../addEmployee'"
+             style="background-color: rgb(29, 138, 29); border-radius: 25px; padding: 8px 20px; font-size: 14px; transition: all 0.3s ease; margin-left: 400px;">
+            Ajouter un employé
+          </a>
+        </div><br><br>
 
-                <!-- Informations de l'employé -->
-                <h5 class="h6">{{ employee.nom }} {{ employee.prenom }}</h5>
-                <p class="small">Dept. <strong>{{ employee.departement.nomDep || 'Non spécifié' }}</strong></p>
-                <p class="text-muted small fw-bold">{{ employee.poste || 'Non spécifié' }}</p>
-                <p class="small">{{ employee.email }}</p>
-                <p class="text-muted small">Solde Congé : {{ employee?.soldeRestant }}</p>
-                <div class="text-center mt-auto">
-                  <a class="btn btn-outline-success btn-sm" [routerLink]="['../','employeeDetails', employee.id]">
-                    <i class="bi bi-info-circle me-1"></i> Détails
-                  </a>
+        <div class="row">
+          <ng-container *ngFor="let employee of employees;">
+            <div class="col-md-4 mb-4 d-flex">
+              <div class="card employee-card w-100 h-100" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px;">
+                <div class="card-body text-center position-relative p-3 d-flex flex-column">
+                  <!-- Edit and Delete Buttons -->
+                  <div class="position-absolute top-0 end-0 mt-1 me-1">
+                    <a class="btn btn-success btn-sm" [routerLink]="['../', 'editEmployee', employee.id]">
+                      <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <button class="btn btn-warning btn-sm ms-1" (click)="openDeleteModal(employee.id)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+
+                  <!-- Profile Picture -->
+                  <img src="/assets/profile.svg" alt="Photo de profil" class="rounded-circle mb-2 mx-auto" style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #ddd;">
+
+                  <!-- Employee Info -->
+                  <h5 class="h6">{{ employee.nom }} {{ employee.prenom }}</h5>
+                  <p class="small">Dept. <strong>{{ employee.departement.nomDep || 'Non spécifié' }}</strong></p>
+                  <p class="text-muted small fw-bold">{{ employee.poste || 'Non spécifié' }}</p>
+                  <p class="small">{{ employee.email }}</p>
+                  <p class="text-muted small">Solde Congé : {{ employee?.soldeRestant }}</p>
+
+                  <!-- Action Button -->
+                  <div class="text-center mt-auto">
+                    <a class="btn btn-outline-success btn-sm" [routerLink]="['../', 'employeeDetails', employee.id]">
+                      <i class="bi bi-info-circle me-1"></i> Détails
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        }
-        @if (!employees || employees.length === 0) {
-          <div class="col-12 text-center text-muted">
-            Aucun employé trouvé
-          </div>
-        }
+          </ng-container>
+
+          <!-- No Employees Found -->
+          <ng-container *ngIf="!employees || employees.length === 0">
+            <div class="col-12 text-center text-muted">
+              Aucun employé trouvé
+            </div>
+          </ng-container>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</form>
+
+<ng-template #deleteModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Confirmer la suppression</h4>
+    <button type="button" class="close" (click)="modal.dismiss('Cross click')" style="margin-left: 150px;">&times;</button>
+  </div>
+  <div class="modal-body">
+    <p>Êtes-vous sûr de vouloir supprimer ce Employé ?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Close click')">Annuler</button>
+    <button type="button" class="btn btn-success" (click)="deleteEmployee(selectedId, modal)">Supprimer</button>
+  </div>
+</ng-template>

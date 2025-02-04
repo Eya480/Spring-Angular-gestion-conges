@@ -1,11 +1,11 @@
 <div class="container mt-5">
     <div class="row">
       <div class="col-md-10 offset-md-1">
-        <div class="card shadow-sm">
+        <div class="card shadow-sm" style="border: 1px solid;">
           <!-- En-tête de la carte avec l'image à gauche -->
-          <div class="card-header text-white d-flex align-items-center" style="background: linear-gradient(135deg, #1a3a1bd7, #2574fc4f);">
+          <div class="card-header text-white d-flex align-items-center" style="background: linear-gradient(135deg, #306e32d7, #2bad6cec);">
             <!-- Image de profil -->
-            <img src="https://picsum.photos/80/80" alt="Photo de profil" class="rounded-circle shadow-sm me-3" style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #fff;">
+            <img src="/assets/profile.svg" alt="Photo de profil" class="rounded-circle shadow-sm me-3" style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #fff;">
             <!-- Titre et bouton de retour -->
             <div class="d-flex justify-content-between align-items-center w-100">
               <h3 class="card-title mb-0">Détails de l'Employé <span class="text-black">{{ employee?.nom }} {{employee?.prenom}}</span></h3>
@@ -21,7 +21,7 @@
             <div class="row g-4">
               <!-- Informations Personnelles -->
               <div class="col-md-6">
-                <div class="card h-100">
+                <div class="card h-100" style="border: 1px solid;">
                   <div class="card-body">
                     <h5 class="card-title text-success">
                       <i class="bi bi-person me-2"></i>Informations Personnelles
@@ -47,7 +47,7 @@
   
               <!-- Informations Professionnelles -->
               <div class="col-md-6">
-                <div class="card h-100">
+                <div class="card h-100" style="border: 1px solid;">
                   <div class="card-body">
                     <h5 class="card-title text-success">
                       <i class="bi bi-briefcase me-2"></i>Informations Professionnelles

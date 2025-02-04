@@ -1,12 +1,16 @@
 package com.gestionConges.backend.gestionConges.controller;
 
 import com.gestionConges.backend.gestionConges.dto.ReqRes;
+import com.gestionConges.backend.gestionConges.model.DemandeConge;
 import com.gestionConges.backend.gestionConges.model.Employe;
 import com.gestionConges.backend.gestionConges.model.Manager;
+import com.gestionConges.backend.gestionConges.repository.ManagerRepo;
+import com.gestionConges.backend.gestionConges.service.DemandeCongeService;
 import com.gestionConges.backend.gestionConges.service.DepartementService;
 import com.gestionConges.backend.gestionConges.service.EmployeService;
 import com.gestionConges.backend.gestionConges.service.PersonnelManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +29,9 @@ public class EmployeController {
     @Autowired
     private DepartementService departementService;
 
+    @Autowired
+    private DemandeCongeService demandeCongeService;
+
     @GetMapping
     public List<Employe> getAllEmployees() {
         return personnelManagementService.getAllEmployees();
@@ -38,6 +45,11 @@ public class EmployeController {
     @GetMapping("/Manager/{id}")
     public Manager getManagerByDepId(@PathVariable Integer id) {
         return departementService.getManagerByDepartement(id);
+    }
+
+    @GetMapping("/demandeByManagerId/{id}")
+    public ResponseEntity<List<DemandeConge>>  getDemandeByManagerId(@PathVariable Integer id) {
+        return new ResponseEntity<>(demandeCongeService.getAllByManager(id), HttpStatus.OK);
     }
 
     @PostMapping("/create-employee")

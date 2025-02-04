@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from '../adminRH/dashboard/dashboard.component';
 import { guardGuard } from '../guard/guard.guard';
 import { ListerDemandeComponent } from './DemandeConges/lister-demande/lister-demande.component';
 import { AjouterDemandeComponent } from './DemandeConges/ajouter-demande/ajouter-demande.component';
@@ -34,7 +33,8 @@ const routes: Routes = [
       path: 'demandeExtension/:id', 
       component: DemandeExtensionComponent,
       canActivate: [guardGuard] // Apply adminRHGuard here
-    }
+    },
+    
 ];
 
 @NgModule({

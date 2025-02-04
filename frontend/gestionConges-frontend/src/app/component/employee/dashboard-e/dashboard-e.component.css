@@ -1,61 +1,109 @@
-/* Style global pour les cartes */
+/* Global Styles for Cards */
 .custom-card {
-    border-radius: 12px; /* Coins arrondis */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); /* Ombre douce */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animation au survol */
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .custom-card:hover {
-    transform: translateY(-5px); /* Légère élévation au survol */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Ombre plus marquée au survol */
-}
-
-.custom-card-header {
-    background: #f1f1f1; /* Gris clair apaisant */
-    border-radius: 10px 10px 0 0;
-    padding: 12px 20px;
+    transform: translateY(-10px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .card-body h5 {
-    font-size: 1.4rem;
-    margin-bottom: 0.8rem;
-    color: #333; /* Gris foncé pour le texte */
+    font-size: 1.5rem;
+    color: #333;
 }
 
 .card-body p {
     font-size: 2rem;
-    font-weight: 600;
 }
 
 .badge {
-    padding: 8px 12px;
-    font-size: 0.9rem;
+    padding: 6px 12px;
+    font-size: 14px; 
     border-radius: 12px;
     text-transform: capitalize;
-}
+    font-weight: 500; 
+  }
 
-/* Statut de la demande */
+
 .bg-warning {
-    background-color: #e9a848 !important; /* Orange pastel */
+    background-color: #e9a848 !important;
 }
 
 .bg-success {
-    background-color: #7fd1b9 !important; /* Vert pastel doux */
+    background-color: #519c86 !important;
 }
 
 .bg-danger {
-    background-color: #e77b71 !important; /* Rouge pastel pour "Refusé" */
+    background-color: #47610c !important;
 }
 
-/* Cartes de données */
-.card {
-    background-color: #f4f8f9; /* Fond neutre et doux */
-}
-
-.card .card-body {
+/* Vertical Bar */
+.vertical-bar {
+    background-color: #f5fafa; 
     padding: 20px;
+    color: black;
+    height: 100%;
+    border: 2px solid gray;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+}
+.upcoming-holidays-title {
+    font-size: 22px; /* Corrigé l'erreur de taille (20pxx à 22px) */
+    font-weight: bold;
+    color: #273f27; /* Une couleur verte plus soutenue */
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.upcoming-holidays-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+
+
+.holiday-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #d3e3d3;
+}
+
+.holiday-date {
+    font-weight: bold;
+}
+
+.holiday-name {
+    font-style: italic;
+}
+
+/* Layout Adjustments */
+.container .row {
+    display: flex;
+}
+
+.col-md-9 {
+    padding-left: 20px;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f8f9fa;
 }
 
 .table-hover tbody tr:hover {
-    background-color: #e9ecef; /* Survol doux des lignes de tableau */
+    background-color: #f1f1f1;
+}
+
+
+.col-md-4.mb-4 {
+    margin-bottom: 20px; }
+.col-md-9 {
+    padding-left: 30px; 
+}
+
+.upcoming-holidays-list li {
+    font-size: 14px;
+    padding: 10px 0; 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 }

@@ -1,0 +1,41 @@
+.badge {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    border-radius: 12px;
+    text-transform: capitalize;
+  }
+  
+  /* Statut de la demande */
+  .bg-warning {
+    background-color: #5b7419 !important; /* Orange pastel */
+  }
+  .bg-w{
+    background-color: #ff7f2a !important;
+    font-weight: bold; /* Orange pastel */
+    color: black  !important;
+  }
+  .nav-link{
+    color: rgb(19, 39, 19);
+    font-size:15px;font-weight: bold;
+    border: 1px solid #ced4da;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.897);
+  transition: all 0.3s ease;
+  cursor: pointer;
+    
+
+  }
+  .nav-tabs .nav-link.active {
+    background-color: #5cbb5c !important;
+    color: white !important;
+    text-shadow: 2px 1px black;
+    font-weight: bold;
+    border-radius: 5px;
+  }
+  .nav-link:hover {
+    background-color: #f8f9fa;
+  }
+  .nav-link:focus {
+    border-color: #1d8a1d;
+    outline: none;
+    box-shadow: 0px 0px 8px rgba(29, 138, 29, 0.5);
+  }
