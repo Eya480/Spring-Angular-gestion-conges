@@ -279,19 +279,14 @@ public class PersonnelManagementService {
             existingPersonnel.setEmail(updatedPersonnel.getEmail());
             existingPersonnel.setNom(updatedPersonnel.getNom());
             existingPersonnel.setPrenom(updatedPersonnel.getPrenom());
-            existingPersonnel.setCIN(updatedPersonnel.getCIN());
             existingPersonnel.setTel(updatedPersonnel.getTel());
-            existingPersonnel.setRole(updatedPersonnel.getRole());
-
-            if (updatedPersonnel.getPwd() != null && !updatedPersonnel.getPwd().isEmpty()) {
-                existingPersonnel.setPwd(passwordEncoder.encode(updatedPersonnel.getPwd()));
-            }
 
             // Mise à jour des propriétés spécifiques en fonction du type d'instance
             if (existingPersonnel instanceof Employe employe) {
                 if (updatedPersonnel instanceof Employe updatedEmploye) {
                     employe.setDepartement(departementRepo.findByNomDep(
                             updatedEmploye.getDepartement().getNomDep()));
+                    employe.setPoste(updatedEmploye.getPoste());
                 } else {
                     reqRes.setStatusCode(400);
                     reqRes.setMessage("Type de personnel incompatible : attendu Employe");

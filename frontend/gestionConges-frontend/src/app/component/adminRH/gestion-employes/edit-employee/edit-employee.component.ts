@@ -3,11 +3,12 @@ import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminRHServiceService } from '../../service/admin-rhservice.service';
 import { ServiceService } from '../../../shared/service.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-edit-employee',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule,CommonModule],
   templateUrl: './edit-employee.component.html',
   styleUrl: './edit-employee.component.css'
 })
@@ -42,7 +43,6 @@ export class EditEmployeeComponent implements OnInit {
     if (f.valid) {
 
       const dataToSend = {
-        CIN: this.employee.cin,
         nom: this.employee.nom,
         prenom: this.employee.prenom,
         tel: this.employee.tel,

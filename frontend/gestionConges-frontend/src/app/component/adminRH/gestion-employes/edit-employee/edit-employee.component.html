@@ -1,11 +1,11 @@
 <div class="container py-5 h-50">
-    <div class="row d-flex justify-content-center align-items-center h-100">
+    <div class="row d-flex justify-content-center align-items-center h-50">
         <div class="col col-xl-10">
             <div class="card shadow-lg" style="border-radius: 1rem; backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.8);">
                 <div class="row g-0">
                     <!-- Image Section -->
                     <div class="col-md-6 col-lg-5 d-none d-md-block">
-                        <img src="/assets/photo.jpg"
+                        <img src="/assets/photo1.jpg"
                             alt="Formulaire d'édition" 
                             class="img-fluid" 
                             style="height: 100%;filter: blur(1px) brightness(0.7) contrast(1.2) saturate(2);" />
@@ -13,9 +13,12 @@
                     <!-- Form Section -->
                     <div class="col-md-7">
                         <div class="card-body p-5 d-flex flex-column justify-content-center">
-                            <h2 class="text-center fw-bold mb-4">Editer l'employé(e) <br> <u><span class="text-success">{{employee.nom}}</span></u></h2>
+                            <h2 class="text-center fw-bold mb-4">Editer l'employé(e)  <span class="text-success">{{employee.nom | titlecase}}</span></h2>
 
                             <form id="EditForm" (ngSubmit)="editEmployee(f)" #f="ngForm">
+
+                                <div class="row">
+                                    <div class="col-md-6">
                                 <!-- Nom Input -->
                                 <div class="form-floating mb-3">
                                     <input 
@@ -33,8 +36,10 @@
                                         <span class="error">Ce champ est obligatoire!</span>
                                     }
                                 </div>
+                                </div>
 
                                 <!-- Prénom Input -->
+                                <div class="col-md-6">
                                 <div class="form-floating mb-3">
                                     <input 
                                       type="text" 
@@ -51,8 +56,12 @@
                                         <span class="error">Ce champ est obligatoire!</span>
                                     }
                                 </div>
+                                </div>
+                                </div>
 
                                 <!-- Email Input -->
+                                <div class="row">
+                                <div class="col-md-6">
                                 <div class="form-floating mb-3">
                                     <input 
                                       type="email" 
@@ -69,25 +78,37 @@
                                         <span class="error">Email invalide</span>
                                     }
                                 </div>
+                                </div>
 
                                 <!-- CIN Input -->
-                                 @if(employee.cin){
-                                <div class="form-floating mb-3">
-                                    <input 
-                                      type="text" 
-                                      id="cinInput" 
-                                      name="cin"
-                                      ngModel #cin="ngModel"
-                                      [(ngModel)]="employee.cin"
-                                      class="form-control" 
-                                      placeholder="Numéro CIN" 
-                                      required
-                                    >
-                                    <label for="cinInput">*Numéro CIN</label>
-                                    @if(cin.touched && cin.invalid){
-                                        <span class="error">Ce champ est obligatoire!</span>
-                                    }
-                                </div>}
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <select 
+                                          id="posteInput" 
+                                          name="poste"
+                                          ngModel
+                                          #poste="ngModel"
+                                          [(ngModel)]="employee.poste"  
+                                          class="form-control" 
+                                          required
+                                        >
+                                          <option value="" disabled selected>Choisir un poste</option>
+                                          <option [value]="employee.poste" selected>
+                                            {{ employee.poste }}
+                                          </option>
+                                          @for(poste of postes;track poste){
+                                              <option [value]="poste">
+                                                  {{ poste }}
+                                              </option>
+                                          }
+                                        </select>
+                                        <label for="posteInput">*Poste</label>
+                                    </div>
+                                </div>
+                                </div>
+
+                                <div class="row">
+                                <div class="col-md-6">
                                   <!-- tel Input -->
                                   <div class="form-floating mb-3">
                                     <input 
@@ -105,7 +126,9 @@
                                         <span class="error">Numéro de Telph invalide</span>
                                     }
                                 </div>
+                                </div>
 
+                                <div class="col-md-6">
                                 <!-- Département Select -->
                                 @if(employee.departement){
                                 <div class="form-floating mb-3">
@@ -127,53 +150,27 @@
                                     <label for="posteInput">*Département</label>
                                 </div>
                             }
+                            </div>
                     
-                                  
-                                <!-- Poste Select -->
-                                <div class="form-floating mb-3">
-                                    <select 
-                                      id="posteInput" 
-                                      name="poste"
-                                      ngModel
-                                      #poste="ngModel"
-                                      [(ngModel)]="employee.poste"  
-                                      class="form-control" 
-                                      required
-                                    >
-                                      <option value="" disabled selected>Choisir un poste</option>
-                                      <option [value]="employee.poste" selected>
-                                        {{ employee.poste }}
-                                      </option>
-                                      @for(poste of postes;track poste){
-                                          <option [value]="poste">
-                                              {{ poste }}
-                                          </option>
-                                      }
-                                    </select>
-                                    <label for="posteInput">*Poste</label>
+                                <div class="col-md-12"> 
+                                    <div class="form-floating mb-3">
+                                        <input 
+                                          type="date" 
+                                          id="dateEmbaucheInput" 
+                                          name="dateEmbauche"
+                                          ngModel #dateEmbauche="ngModel"
+                                          [(ngModel)]="employee.dateEmbauche"
+                                          class="form-control" 
+                                          placeholder="Date d'embauche" 
+                                          required
+                                        >
+                                        <label for="dateEmbaucheInput">*Date d'embauche</label>
+                                        @if(dateEmbauche.touched && dateEmbauche.invalid){
+                                            <span class="error">Ce champ est obligatoire!</span>
+                                        }
+                                    </div>
                                 </div>
-
-                                <!-- Date d'embauche Input -->
-                                <div class="form-floating mb-3">
-                                    <input 
-                                      type="date" 
-                                      id="dateEmbaucheInput" 
-                                      name="dateEmbauche"
-                                      ngModel #dateEmbauche="ngModel"
-                                      [(ngModel)]="employee.dateEmbauche"
-                                      class="form-control" 
-                                      placeholder="Date d'embauche" 
-                                      required
-                                    >
-                                    <label for="dateEmbaucheInput">*Date d'embauche</label>
-                                    @if(dateEmbauche.touched && dateEmbauche.invalid){
-                                        <span class="error">Ce champ est obligatoire!</span>
-                                    }
-                                </div>
-                              
-                                  
-                                  
-
+  </div>        
                                 <!-- Error Message -->
                                 @if (errorMessage){
                                 <div class="alert alert-danger mt-3" [innerHTML]="errorMessage">

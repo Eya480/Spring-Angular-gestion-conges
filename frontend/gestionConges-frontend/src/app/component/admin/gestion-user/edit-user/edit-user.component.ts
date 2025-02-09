@@ -77,9 +77,7 @@ export class EditUserComponent implements OnInit {
   editUser(f: NgForm) {
     if (this.token) {
     if (f.valid) {
-
       const dataToSend = {
-        CIN: this.user.cin,
         nom: this.user.nom,
         prenom: this.user.prenom,
         tel: this.user.tel,
@@ -121,10 +119,11 @@ export class EditUserComponent implements OnInit {
         if (id && this.token) {
           this.UserService.getUserById(id, this.token).subscribe({
             next: (userData) => {
-              this.firstDepSelected= userData.departement.nomDep;
+
+              if(userData.role!='AdminRH'){this.firstDepSelected= userData.departement.nomDep;}
 
               this.user = userData;
-              //console.log(userData)
+              console.log(userData)
               this.role=userData.role;
             },
             error: (error) => {

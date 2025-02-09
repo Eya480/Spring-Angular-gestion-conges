@@ -5,7 +5,7 @@
                 <div class="row g-0">
                     <!-- Image Section -->
                     <div class="col-md-6 col-lg-5 d-none d-md-block">
-                        <img src="/assets/photo.jpg"
+                        <img src="/assets/photo1.jpg"
                             alt="Formulaire d'édition" 
                             class="img-fluid" 
                             style="height: 100%;filter: blur(1px) brightness(0.7) contrast(1.2) saturate(2);" />
@@ -13,7 +13,7 @@
                     <!-- Form Section -->
                     <div class="col-md-7">
                         <div class="card-body p-5 d-flex flex-column justify-content-center">
-                            <h2 class="text-center fw-bold mb-4">Editer l'Utilisateur <br> <u><span class="text-success">{{user.nom}}</span></u></h2>
+                            <h2 class="text-center fw-bold mb-4">Editer l'Utilisateur <span class="text-success">{{user.nom}}</span></h2>
 
                             <form id="EditForm" (ngSubmit)="editUser(f)" #f="ngForm">
                                 <!-- Nom Input -->
@@ -87,25 +87,6 @@
                                         <span class="error">Numéro de Telph invalide</span>
                                     }
                                 </div>
-
-                                <!-- CIN Input -->
-                                 @if(user.cin){
-                                <div class="form-floating mb-3">
-                                    <input 
-                                      type="text" 
-                                      id="cinInput" 
-                                      name="cin"
-                                      ngModel #cin="ngModel"
-                                      [(ngModel)]="user.cin"
-                                      class="form-control" 
-                                      placeholder="Numéro CIN" 
-                                      required
-                                    >
-                                    <label for="cinInput">*Numéro CIN</label>
-                                    @if(cin.touched && cin.invalid){
-                                        <span class="error">Ce champ est obligatoire!</span>
-                                    }
-                                </div>}
 
 
                                 @if(role=='User' || role=='Manager'){
