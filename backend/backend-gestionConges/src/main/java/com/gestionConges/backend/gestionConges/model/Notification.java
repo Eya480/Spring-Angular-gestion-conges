@@ -12,7 +12,11 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idNotif;
+
     private String contenu;
+
+    private Boolean is_read;
+
     private LocalDateTime dateEnvoi;
     @ManyToOne
     @JoinColumn(name = "personnel_id", nullable = false)
@@ -24,6 +28,14 @@ public class Notification {
 
     public void setIdNotif(Integer idNotif) {
         this.idNotif = idNotif;
+    }
+
+    public Boolean getIs_read() {
+        return is_read;
+    }
+
+    public void setIs_read(Boolean is_read) {
+        this.is_read = is_read;
     }
 
     public LocalDateTime getDateEnvoi() {

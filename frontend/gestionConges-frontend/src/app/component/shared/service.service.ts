@@ -41,6 +41,16 @@ export class ServiceService {
     return this.http.get<any>(url, { headers });
   }
 
+  updateEtatIsRead(id: string, token: string): Observable<any> {
+    const url = `${this.url}/UserManager/modifierIsReadNotif/${id}`;
+    const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<any>(url, { headers });
+}
+
+
   logOut(): void {
     if (typeof localStorage !== 'undefined') {
       // Remove token and role from localStorage

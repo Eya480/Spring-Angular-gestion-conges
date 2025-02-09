@@ -4,6 +4,7 @@ import { ServiceService } from '../../shared/service.service';
 import { forkJoin, of } from 'rxjs';
 import { map } from 'rxjs/operators'; 
 import { CommonModule } from '@angular/common';
+import { ManagerServiceService } from '../../manager/service/manager-service.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,17 +15,19 @@ import { CommonModule } from '@angular/common';
 export class DashboardComponent implements OnInit {
   departements?: any[] = [];
   employees?: any[] = [];
+  employe:any;
   refuse: number = 0;
   approuve: number = 0;
   att: number = 0;
   token = localStorage.getItem("token");
   nbtypeConges?: number = 0;
 
-  absenceAjourdui?: any[] = [];  // Demandes d'absences pour aujourd'hui
+  absenceAjourdui?: any[] = [];  
 
   constructor(
     private sharedService: ServiceService,
-    private TypeCService: AdminRHServiceService
+    private TypeCService: AdminRHServiceService,
+    private manService : ManagerServiceService
   ) {}
 
   countDemandesByStatus(demandes: any[], status: string): number {
@@ -60,16 +63,16 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.token) {
-      // Charger les types de congés
       this.TypeCService.getAllTypeC(this.token).subscribe({
         next: (data) => { this.nbtypeConges = data.length; },
         error: () => { console.error("Erreur lors du chargement des types de congés."); }
       });
 
-      // Charger les départements
+      
+
       this.sharedService.getAllDepartements().subscribe({
         next: (data) => {
-          console.log("Departements data:", data);
+          //console.log("Departements data:", data);
           this.departements = data;
 
           const managerRequests = data.map(departement => {
@@ -107,7 +110,7 @@ export class DashboardComponent implements OnInit {
 
               forkJoin(demandeRequests).subscribe({
                 next: (demandesResults) => {
-                  console.log("Demandes results:", demandesResults);
+                  //console.log("Demandes results:", demandesResults);
                   this.departements = demandesResults
                     .filter((result: any) => result !== null)
                     .map((result: any) => ({
@@ -121,8 +124,26 @@ export class DashboardComponent implements OnInit {
                   const allDemandes = this.departements.flatMap(departement => departement.manager?.demandes || []);
                   this.countAllDemandesByStatus(allDemandes);
                   
-                  // Maintenant, on filtre les demandes pour aujourd'hui
-                  this.absenceAjourdui = allDemandes.filter(demande => this.isToday(demande.date)); // Filtrer les demandes d'absence d'aujourd'hui
+                  this.absenceAjourdui = allDemandes
+                  .filter(demande => this.isToday(demande.dateDebut))
+                  .map(demande => ({ ...demande, employe: null })); // Initialisation de l'objet fusionné
+                
+                const observables = this.absenceAjourdui.map(demande =>
+                  this.manService.getEmployeByDemandeConge(this.token!, demande.idDemande).pipe(
+                    map(employe => ({ ...demande, employe })) // Associer chaque employé à sa demande
+                  )
+                );
+                
+                forkJoin(observables).subscribe({
+                  next: (result) => {
+                    this.absenceAjourdui = result; // Mettre à jour la liste avec les employés associés
+                  },
+                  error: (err) => {
+                    console.error('Erreur lors de la récupération des employés:', err);
+                  }
+                });
+
+                
                 },
                 error: (error) => { console.error("Erreur lors du chargement des demandes de l'équipe.", error); }
               });

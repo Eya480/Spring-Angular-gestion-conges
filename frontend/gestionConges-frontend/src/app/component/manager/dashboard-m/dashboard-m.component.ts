@@ -17,7 +17,6 @@ export class DashboardMComponent {
   nbDextension : number=0;
   token = localStorage.getItem("token");
   
-  nbEmployes: number = 0;  // Nombre d'employés uniques
   demandesApprouvees: number = 0;
   
   constructor(private managerService: ManagerServiceService) {}
@@ -50,7 +49,6 @@ export class DashboardMComponent {
 
               // Calculer le nombre d'employés uniques en extrayant les employées
               const employesUnniques = new Set(demandesAvecEmployes.map(d => d.employe.id)); // Assurez-vous que chaque employé a un id unique
-              this.nbEmployes = employesUnniques.size;
 
               // Calcul du nombre de demandes approuvées
               this.demandesApprouvees = demandesAvecEmployes.filter(d => d.statut === 'Approuve').length;

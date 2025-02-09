@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-black p-3 shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-dark bg-black p-2 shadow-sm">
   <div class="container-fluid">
     <!-- Logo -->
     <a class="navbar-brand" routerLink="/">
@@ -52,23 +52,39 @@
           <li class="nav-item">
             <a class="nav-link" routerLink="/manager/historiqueDemandesEquipe">Historique Demandes Congés</a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fas fa-bell"></i>
-              <span *ngIf="unreadCount > 0" class="badge bg-danger position-absolute top-0 start-100 translate-middle">{{ unreadCount }}</span>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li *ngIf="notifications.length === 0"><a class="dropdown-item">Aucune notification</a></li>
-              <li *ngFor="let notif of notifications">
-                  {{ notif.message }}
-                  <span *ngIf="!notif.read" class="badge bg-danger">Nouveau Soumission</span>
-              </li>
-            </ul>
-          </li>
+
+         
+
           <li class="nav-item">
             <a class="nav-link" routerLink="/manager/demandeEnAttente">Demandes En Attente</a>
           </li>
-           <!-- Bouton Notifications -->
+
+          <li class="nav-item dropdown"> 
+            <a class="nav-link position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-bell-fill"></i>
+          
+              <span *ngIf="unreadCount > 0" class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                {{ unreadCount }}
+              </span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <p class="notif">Notifications</p>
+              <li *ngIf="notifications.length === 0">
+                <a class="dropdown-item">Aucune notification</a>
+              </li>
+              @for( notif of notifications; track notif){
+              <li class="d-flex align-items-center">
+                <img src="/assets/profile.svg" alt="profile" class="me-2" style="width: 40px; height: 40px;">
+                <a class="dropdown-item" (click)="!notif.is_read ? markAsRead(notif, notif.idNotif) : null"
+                [routerLink]="['../../manager/demandeEnAttente']"
+                [ngClass]="{'unread-notification':!notif.is_read}"
+                >
+                  {{ notif.contenu }}
+              </a>
+              </li>
+            }
+            </ul>
+          </li>
           
         }
 
@@ -76,24 +92,37 @@
           <li class="nav-item">
             <a class="nav-link" routerLink="/employee">Dashboard</a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fas fa-bell"></i>
-              <span *ngIf="unreadCount > 0" class="badge bg-danger position-absolute top-0 start-100 translate-middle">{{ unreadCount }}</span>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li *ngIf="notifications.length === 0"><a class="dropdown-item">Aucune notification</a></li>
-              <li *ngFor="let notif of notifications">
-                  {{ notif.message }}
-                  <span *ngIf="!notif.read" class="badge bg-danger">Nouveau Validation , go and check !</span>
-              </li>
-            </ul>
-          </li>
+    
           <li class="nav-item">
             <a class="nav-link" routerLink="/employee/demandeConges">Demande Congés</a>
+          </li>  
+          
+          <li class="nav-item dropdown"> 
+            <a class="nav-link position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-bell-fill"></i>
+          
+              <span *ngIf="unreadCount > 0" class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                {{ unreadCount }}
+              </span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <p class="notif">Notifications</p>
+              <li *ngIf="notifications.length === 0">
+                <a class="dropdown-item">Aucune notification</a>
+              </li>
+              @for( notif of notifications; track notif){
+              <li class="d-flex align-items-center">
+                <img src="/assets/profile.svg" alt="profile" class="me-2" style="width: 40px; height: 40px;">
+                <a class="dropdown-item" (click)="!notif.is_read ? markAsRead(notif, notif.idNotif) : null"
+                [routerLink]="['../../employee/demandeConges']"
+                [ngClass]="{'unread-notification':!notif.is_read}"
+                >
+                  {{ notif.contenu }}
+              </a>
+              </li>
+            }
+            </ul>
           </li>
-              <!-- Bouton Notifications -->
-              
       
         }
 
@@ -108,17 +137,27 @@
             <a class="nav-link" routerLink="/admin/departement">Département</a>
           </li>
         }
+        <!-- Dropdown pour Profil et Déconnexion -->
         @if(isAuthenticated) {
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/profile">Profil</a>
+          <li class="nav-item dropdown" style="margin-left: 50px;">
+            <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{profileInfo?.nom | titlecase }} {{profileInfo?.prenom | titlecase }}
+              <img src="/assets/profile.svg" alt="profile" style="width: 30px; height: 30px; border-radius: 50%; background-color: wheat;">
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <a class="dropdown-item" routerLink="/profile"><i class="bi bi-person"></i> Mon Profil</a>
+              </li>
+              <li>
+                <a class="dropdown-item" (click)="logout()" style="cursor: pointer;"><i class="bi bi-box-arrow-right"></i> Se déconnecter</a>
+              </li>
+            </ul>
           </li>
         }
+        
       </ul>
 
-      <!-- Bouton de déconnexion -->
-      @if(isAuthenticated) {
-        <button class="btn btn-outline-light" (click)="logout()" style="margin-left: 20px;">Se déconnecter</button>
-      }
+      
     </div>
   </div>
 </nav>

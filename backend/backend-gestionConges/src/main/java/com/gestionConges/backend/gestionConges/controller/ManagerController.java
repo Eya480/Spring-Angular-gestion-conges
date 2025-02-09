@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/Manager")
 public class ManagerController {
 
     @Autowired
@@ -33,7 +32,7 @@ public class ManagerController {
     @Autowired
     private DemandeCongeRepo demandeCongeRepo;
 
-    @GetMapping("/get-all-demande-by-manager")
+    @GetMapping("/api/Manager/get-all-demande-by-manager")
     public ResponseEntity<List<DemandeConge>> getAllDemandeByManager() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
@@ -53,20 +52,20 @@ public class ManagerController {
         return ResponseEntity.ok(demandeConges);
     }
 
-    @GetMapping("/get-employe-by-demande/{id}")
+    @GetMapping("/ManagerAdminRH/get-employe-by-demande/{id}")
     public ResponseEntity<Employe> getEmployeByDemandeConge(@PathVariable Integer id){
         Employe employe=demandeCongeService.getEmployeByDemandeConge(demandeCongeRepo.findById(id).get());
         return ResponseEntity.ok(employe);
     }
 
-    @GetMapping("/refuser-demande/{id}")
+    @GetMapping("/api/Manager/refuser-demande/{id}")
     public ResponseEntity<?> refuserDemande(@PathVariable Integer id){
         demandeCongeService.refuseDemande(id);
         return ResponseEntity.ok(Map.of("message","Demande de congé refusée avec succès"));
 
     }
 
-    @GetMapping("/approuve-demande/{id}")
+    @GetMapping("/api/Manager/approuve-demande/{id}")
     public ResponseEntity<?> approuverDemande(@PathVariable Integer id){
         DemandeConge demandeConge=demandeCongeRepo.findById(id).get();
         if(demandeConge.getTypeConge().getAffecteSoldeConge()){

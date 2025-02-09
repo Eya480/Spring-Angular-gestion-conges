@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class NavComponent {
   isAuthenticated:boolean = false;
+  profileInfo: any;
   isAdmin:boolean = false;
   isAdminRH:boolean = false;
   isManager:boolean = false;
@@ -27,7 +28,20 @@ export class NavComponent {
       this.isManager = this.authService.isManager();
       this.isUser = this.authService.isUser();
       console.log(this.authService.isAdminRH());
+
+      if(this.isUser || this.isManager){
       this.loadNotifications();
+      }
+
+      if(this.token){
+      this.authService.getProfile(this.token).subscribe({
+        next: (response) => {
+          this.profileInfo = response.personnel; 
+        },
+        error: () => {          
+        },
+      });
+    }
   }
 
   logout():void{
@@ -43,13 +57,18 @@ export class NavComponent {
     if(this.token){
     this.authService.getAllNotif(this.token).subscribe(data => {
       this.notifications = data;
-      this.unreadCount = this.notifications.filter(n => !n.read).length;
+      this.notifications.sort((a,b)=>(a.is_read?1:-1) - (b.is_read?1:-1) );
+      this.unreadCount = this.notifications.filter(n => !n.is_read).length;
     });
   }
   }
 
-  markAsRead(notification: any): void {
-    notification.read = true;
-    this.unreadCount = this.notifications.filter(n => !n.read).length;
+  markAsRead(notification: any,id : any): void {
+    notification.is_read = true;
+    if(this.token){
+      this.authService.updateEtatIsRead(id,this.token).subscribe();
+      
+    }
+    this.unreadCount = this.notifications.filter(n => !n.is_read).length;
   }
 }

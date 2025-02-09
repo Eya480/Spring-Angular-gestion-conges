@@ -1,9 +1,9 @@
-<div class="container py-5 h-100">
-    <div class="row d-flex justify-content-center align-items-center h-100">
+<div class="container py-5 h-50">
+  <div class="row d-flex justify-content-center align-items-center h-50">
       <div class="col col-xl-10">
-        <div class="card shadow-lg" style="border-radius: 1rem; backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.8);">
-          <div class="row g-0">
-            <!-- Image Section -->
+          <div class="card shadow-lg" style="border-radius: 1rem; backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.8);">
+              <div class="row g-0">
+                  <!-- Image Section -->
             <div class="col-md-6 col-lg-5 d-none d-md-block">
               <img src="/assets/ajouter.jpg"
                    alt="Formulaire d'employé"
@@ -17,6 +17,8 @@
                 <h2 class="text-center fw-bold mb-4">Ajouter un Employé</h2>
   
                 <form [formGroup]="AddEmployeeForm" (ngSubmit)="onSubmit()">
+                  <div class="row">
+                  <div class="col-md-6">
                   <!-- CIN -->
                   <div class="form-floating mb-3">
                     <input type="text" id="cinInput" formControlName="cin" class="form-control" placeholder="CIN" required>
@@ -25,8 +27,10 @@
                       <span class="error">Ce champ est obligatoire!</span>
                     }
                   </div>
+                  </div>
   
                   <!-- Nom -->
+                  <div class="col-md-6">
                   <div class="form-floating mb-3">
                     <input type="text" id="nomInput" formControlName="nom" class="form-control" placeholder="Nom" required>
                     <label for="nomInput">*Nom</label>
@@ -34,8 +38,14 @@
                       <span class="error">Ce champ est obligatoire!</span>
                     }
                   </div>
+                  </div>
+                  </div>
+
+
   
+                  <div class="row">
                   <!-- Prénom -->
+                  <div class="col-md-6">
                   <div class="form-floating mb-3">
                     <input type="text" id="prenomInput" formControlName="prenom" class="form-control" placeholder="Prénom" required>
                     <label for="prenomInput">*Prénom</label>
@@ -43,8 +53,10 @@
                       <span class="error">Ce champ est obligatoire!</span>
                     }
                   </div>
+                  </div>
   
                   <!-- Téléphone -->
+                  <div class="col-md-6">
                   <div class="form-floating mb-3">
                     <input type="tel" id="telInput" formControlName="tel" class="form-control" placeholder="Téléphone" required>
                     <label for="telInput">*Téléphone</label>
@@ -52,7 +64,11 @@
                       <span class="error">Ce champ est obligatoire!</span>
                     }
                   </div>
+                  </div>
+                  </div>
   
+                  <div class="row">
+                  <div class="col-md-6">
                   <!-- Email -->
                   <div class="form-floating mb-3">
                     <input type="email" id="emailInput" formControlName="email" class="form-control" placeholder="Email" required>
@@ -61,8 +77,10 @@
                       <span class="error">Ce champ est obligatoire!</span>
                     }
                   </div>
+                  </div>
   
                   <!-- Mot de passe -->
+                  <div class="col-md-6">
                   <div class="form-floating mb-3">
                     <input type="password" id="pwdInput" formControlName="pwd" class="form-control" placeholder="Mot de Passe" required>
                     <label for="pwdInput">*Mot de Passe</label>
@@ -70,7 +88,11 @@
                       <span class="error">Ce champ est obligatoire!</span>
                     }
                   </div>
+                  </div>
+                  </div>
 
+                  <div class="row">
+                  <div class="col-md-6">
                   <div class="form-floating mb-3">
                     <select
                     id="posteSelect"
@@ -78,28 +100,17 @@
                      class="form-select"
                        required
                            >
+                           <option value="" disabled selected>Choisir une Poste</option>
                          <!-- Liste statique des postes -->
                           @for(poste of postes;track poste){
                        <option [value]="poste">{{ poste }}</option>}
                          </select>
                          <label for="posteSelect">*Poste</label>
                          </div>
+                  </div>
   
-                  <!-- Department Input -->
-                  <div class="form-floating mb-3">
-                    <select
-                        id="departementSelect"
-                        formControlName="nomDep"
-                        class="form-select"
-                        required
-                    >
-                        <option value="" disabled selected>Choisir un département</option>
-                        @for(dep of departements ; track dep){
-                        <option [value]="dep">{{ dep }}</option>}
-                    </select>
-                    <label for="departementSelect">*Département</label>
-                </div>
                 <!-- Date Embauche Input -->
+                <div class="col-md-6">
                 <div class="form-floating mb-3">
                     <input 
                         type="date" 
@@ -114,7 +125,23 @@
                         <span class="error">Ce champ est obligatoire!</span>
                     }
                 </div>
-                <input type="text" name="" id="" formControlName="role" style="display: none;">              
+                <input type="text" name="" id="" formControlName="role" style="display: none;">  
+                </div>   
+                </div> 
+                 <!-- Department Input -->
+                 <div class="form-floating mb-3">
+                  <select
+                      id="departementSelect"
+                      formControlName="nomDep"
+                      class="form-select"
+                      required
+                  >
+                      <option value="" disabled selected>Choisir un département</option>
+                      @for(dep of departements ; track dep){
+                      <option [value]="dep">{{ dep }}</option>}
+                  </select>
+                  <label for="departementSelect">*Département</label>
+              </div>        
   
                   <!-- Error Message -->
                   @if(errorMessage){

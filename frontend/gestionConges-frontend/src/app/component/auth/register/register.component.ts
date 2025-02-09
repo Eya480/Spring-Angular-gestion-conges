@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ServiceService } from '../../shared/service.service';
@@ -9,7 +9,7 @@ import { ServiceService } from '../../shared/service.service';
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit{
   registerForm!: FormGroup;
   errorMessage: string = '';
   successMessage : string = '';
@@ -25,16 +25,7 @@ export class RegisterComponent {
     'Architecte logiciel',
     'Data Scientist',
   ];
-  departements: string[] = [
-    'Développement',
-    'Cybersécurité',
-    'Gestion des Projets',
-    'Administration Systèmes',
-    'Services Cloud',
-    'Ressources Humaines',
-    'Développement Logiciel',
-    'Infrastructure et Réseaux',
-  ];
+  departements: string[] = [];
 
   constructor(
     private router: Router,
@@ -54,6 +45,17 @@ export class RegisterComponent {
       role: ['User'],
   });
   }  
+  ngOnInit(): void {
+    this.authService.getAllDepartements().subscribe({
+      next: (data) => {
+        // If the backend returns objects with nomDep, just extract the names
+        this.departements = data.map(departement => departement.nomDep); // Just get names
+      },
+      error: (error) => {
+        this.errorMessage = "Erreur lors du chargement des départements.";
+      }
+    });
+  }
       
     onSubmit(): void {
       const formData = this.registerForm.value;

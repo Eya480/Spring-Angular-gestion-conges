@@ -1,22 +1,16 @@
-/* Global Styles for Cards */
 .custom-card {
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.custom-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-}
-
-.card-body h5 {
-    font-size: 1.5rem;
-    color: #333;
-}
-
-.card-body p {
-    font-size: 2rem;
-}
+    border-radius: 8px;
+    background-color:rgb(135, 136, 77);
+    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+  }
+  .custom-card:hover {
+    transform: scale(1.05);
+  }
+  .custom-card-header {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #ddd;
+  }
 
 .badge {
     padding: 6px 12px;

@@ -41,6 +41,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/adminRH/**").hasAnyAuthority("Admin")
                         .requestMatchers("/api/Manager/**").hasAnyAuthority("Manager")
                         .requestMatchers("/api/employees/**").hasAnyAuthority("AdminRH")
+                        .requestMatchers("/ManagerAdminRH/**").hasAnyAuthority("AdminRH","Manager")
                         .requestMatchers("/UserManager/**").hasAnyAuthority("Manager","User")
                         .requestMatchers("/adminRHUserManagerAdmin/**").hasAnyAuthority("AdminRH", "Manager", "User","Admin")
                         .requestMatchers("/api/adminAdminRH").hasAnyAuthority("Admin","AdminRH")

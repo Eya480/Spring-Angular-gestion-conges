@@ -2,6 +2,7 @@ package com.gestionConges.backend.gestionConges.controller;
 
 import com.gestionConges.backend.gestionConges.dto.ReqRes;
 import com.gestionConges.backend.gestionConges.model.*;
+import com.gestionConges.backend.gestionConges.service.NotifService;
 import com.gestionConges.backend.gestionConges.service.PersonnelManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,9 @@ import java.util.Map;
 public class PersonnelManagementController {
     @Autowired
     private PersonnelManagementService personnelManagementService;
+
+    @Autowired
+    private NotifService notifService;
 
     @GetMapping("/UserManager/get-all-notif")
     public ResponseEntity<List<Notification>> getAllNotifByPersonnel(){
@@ -116,5 +120,22 @@ public class PersonnelManagementController {
         //System.out.println("aslema :" + response.getEmploye());
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
+
+    //notif for the employee nd manager
+    @GetMapping("/UserManager/modifierIsReadNotif/{id}")
+    public ResponseEntity<?> modifierIsReadNotif(@PathVariable Integer id) {
+        try {
+            notifService.updateIsReadNotif(id);
+            return ResponseEntity.ok(Map.of("message", "Le statut 'is_read' de cette notification a été modifié avec succès"));
+
+        } catch (Exception e) {
+            // Exception générale pour toute autre erreur
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Erreur interne du serveur", "details", e.getMessage()));
+        }
+    }
+
+
+
 
 }

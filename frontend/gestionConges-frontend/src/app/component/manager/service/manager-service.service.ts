@@ -8,12 +8,12 @@ import { Router } from '@angular/router';
 })
 export class ManagerServiceService {
 
-  private url="http://localhost:8080/api/Manager";
+  private url="http://localhost:8080";
   
   constructor(private http: HttpClient,private router: Router) { }
 
   getAllDemandeEquipe(token : string): Observable<any>{
-    const url = `${this.url}/get-all-demande-by-manager`; 
+    const url = `${this.url}/api/Manager/get-all-demande-by-manager`; 
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
@@ -22,7 +22,7 @@ export class ManagerServiceService {
   }
 
   getEmployeByDemandeConge(token : string,id : string): Observable<any>{
-    const url = `${this.url}/get-employe-by-demande/${id}`; 
+    const url = `${this.url}/ManagerAdminRH/get-employe-by-demande/${id}`; 
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
@@ -31,7 +31,7 @@ export class ManagerServiceService {
   }
 
   refuserDemande(id: string, token: string): Observable<any> {
-    const url = `${this.url}/refuser-demande/${id}`; 
+    const url = `${this.url}/api/Manager/refuser-demande/${id}`; 
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
@@ -40,7 +40,7 @@ export class ManagerServiceService {
 }
 
 approuverDemande(id: string, token: string): Observable<any> {
-    const url = `${this.url}/approuve-demande/${id}`; 
+    const url = `${this.url}/api/Manager/approuve-demande/${id}`; 
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });

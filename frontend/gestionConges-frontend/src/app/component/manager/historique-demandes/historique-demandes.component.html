@@ -2,8 +2,8 @@
     <div class="container mt-5">
         <div class="row mb-5 align-items-center">
         <!-- Titre -->
-        <div class="col-12 col-md-6">
-          <h2 class="text-dark fw-bold">🕒 Historique des Congés du Département {{nomDep}}</h2>
+        <div class="col-12 col-md-10">
+          <h2 class="text-dark fw-bold">Historique des Congés du Département {{nomDep}}</h2>
           <p class="text-muted" style="margin-bottom: 0px;">Explorez l'historique des demandes de congé de votre équipe</p>
         </div>
       </div>
@@ -27,7 +27,7 @@
   
           <!-- Filtre Type de Congé -->
           <div class="mb-4">
-            <label for="dateDebut" class="form-label">Filtrer par Type Congé</label>
+            <label for="dateDebut" class="form-label">Filtre par Type Congé</label>
             <select formControlName="typeConge" class="form-select border-black">
                 <option value="">Tous les types</option>
                 <option *ngFor="let type of typeConges" [value]="type.nomTypeConge">{{ type.nomTypeConge }}</option>
@@ -36,7 +36,7 @@
   
           <!-- Filtre Date de Début -->
           <div class="mb-4">
-            <label for="dateDebut" class="form-label">Filtrer par Date</label>
+            <label for="dateDebut" class="form-label">Filtre par Date</label>
             <input formControlName="dateDebut" type="date" class="form-control border-black" />
           </div>
   

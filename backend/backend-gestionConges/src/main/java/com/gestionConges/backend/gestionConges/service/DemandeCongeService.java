@@ -52,7 +52,7 @@ public class DemandeCongeService {
         Notification notification= new Notification();
         notification.setDateEnvoi(LocalDateTime.now());
         notification.setDestinataire(demandeConge.getManager());
-        notification.setContenu(employe.getNom()+" a Soumit une demande Le :"+LocalDate.now()+", avec la raison de : "+demandeConge.getReason());
+        notification.setContenu(employe.getNom() + " a soumis une demande de congé pour le " + LocalDate.now() + ". Motif : " + demandeConge.getReason() + ".");
 
 
         notifRepo.save(notification);
@@ -136,7 +136,7 @@ public class DemandeCongeService {
     public void approuveDemandeSolde(DemandeConge demandeConge){
 
         demandeConge.setStatut(EtatDemande.Approuve);
-        //mettre a jour le cumule
+        //mettre à jour le cumule
         demandeConge.getEmploye().setsoldeCumule();
         demandeConge.setEstDExtension(false);
         demandeConge.getEmploye().setSoldeConsommes((int)(ChronoUnit.DAYS.between(demandeConge.getDateDebut(), demandeConge.getDateFin()) + 1));
@@ -145,7 +145,8 @@ public class DemandeCongeService {
         Notification notification= new Notification();
         notification.setDateEnvoi(LocalDateTime.now());
         notification.setDestinataire(demandeConge.getEmploye());
-        notification.setContenu("Le Manager de Votre Département a Validé Votre Demande de Congé, GO AND CHECK !");
+        notification.setIs_read(false);
+        notification.setContenu("Le manager de votre département a validé votre demande de congé, GO AND CHECK !");
 
         notifRepo.save(notification);
 
@@ -161,7 +162,8 @@ public class DemandeCongeService {
         Notification notification= new Notification();
         notification.setDateEnvoi(LocalDateTime.now());
         notification.setDestinataire(demandeConge.getEmploye());
-        notification.setContenu("Le Manager de Votre Département a Validé Votre Demande de Congé, GO AND CHECK !");
+        notification.setIs_read(false);
+        notification.setContenu("Le manager de votre département a validé votre demande de congé, GO AND CHECK !");
 
         notifRepo.save(notification);
 
@@ -176,7 +178,8 @@ public class DemandeCongeService {
         Notification notification= new Notification();
         notification.setDateEnvoi(LocalDateTime.now());
         notification.setDestinataire(demandeConge.getEmploye());
-        notification.setContenu("Le Manager de Votre Département a Réfusé Votre Demande de Congé, GO AND CHECK !");
+        notification.setIs_read(false);
+        notification.setContenu("Le manager de votre département a Réfusé votre demande de congé, GO AND CHECK !");
 
         notifRepo.save(notification);
 

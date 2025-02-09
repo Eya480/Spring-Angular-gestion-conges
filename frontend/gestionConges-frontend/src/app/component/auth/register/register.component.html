@@ -26,6 +26,8 @@
                             }
                             <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
                                 <!-- Nom Input -->
+                                <div class="row">
+                                <div class="col-md-6">
                                 <div class="form-floating mb-3">
                                     <input 
                                         type="text" 
@@ -40,8 +42,10 @@
                                         <span class="error">Ce champ est obligatoire!</span>
                                     }
                                 </div>
+                                </div>
 
                                 <!-- Prénom Input -->
+                                <div class="col-md-6">
                                 <div class="form-floating mb-3">
                                     <input 
                                         type="text" 
@@ -56,8 +60,12 @@
                                         <span class="error">Ce champ est obligatoire!</span>
                                     }
                                 </div>
+                                </div>
+                                </div>
 
+                                <div class="row">
                                 <!-- Email Input -->
+                                <div class="col-md-6">
                                 <div class="form-floating mb-3">
                                     <input 
                                         type="email" 
@@ -73,8 +81,10 @@
                                         <span class="error">Ce champ est obligatoire!</span>
                                     }
                                 </div>
+                                </div>
 
                                 <!-- CIN Input -->
+                                <div class="col-md-6">
                                 <div class="form-floating mb-3">
                                     <input 
                                         type="text" 
@@ -85,7 +95,13 @@
                                     >
                                     <label for="cinInput">*Numéro CIN</label>
                                 </div>
+                                </div>
+                                </div>
 
+
+
+                                <div class="row">
+                                <div class="col-md-6">
                                 <!-- Tel Input -->
                                 <div class="form-floating mb-3">
                                     <input 
@@ -101,21 +117,10 @@
                                         <span class="error">Ce champ est obligatoire!</span>
                                     }
                                 </div>
-
-                                <!-- Department Input -->
-                                <div class="form-floating mb-3">
-                                    <select
-                                        id="departementSelect"
-                                        formControlName="nomDep"
-                                        class="form-select"
-                                        required
-                                    >
-                                        <option value="" disabled selected>Choisir un département</option>
-                                        @for(dep of departements ; track dep){
-                                        <option [value]="dep">{{ dep }}</option>}
-                                    </select>
-                                    <label for="departementSelect">*Département</label>
                                 </div>
+
+                                <div class="col-md-6">
+
                                 <!-- Date Embauche Input -->
                                 <div class="form-floating mb-3">
                                     <input 
@@ -132,6 +137,23 @@
                                     }
                                 </div>
                                 <input type="text" name="" id="" formControlName="role" style="display: none;">
+                                </div>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <select
+                                        id="departementSelect"
+                                        formControlName="nomDep"
+                                        class="form-select"
+                                        required
+                                    >
+                                        <option value="" disabled selected>Choisir un département</option>
+                                        @for(dep of departements ; track dep){
+                                        <option [value]="dep">{{ dep }}</option>}
+                                    </select>
+                                    <label for="departementSelect">*Département</label>
+                                </div>
+                                
 
                                 <!-- Poste Input -->
                               <div class="form-floating mb-3">
