@@ -12,7 +12,7 @@
     <!-- Filtre et Bouton Ajouter -->
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
-        <label class="form-label fw-bold">Filtre par Poste</label>
+        <label class="form-label fw-bold">Filtre par Type Congé</label>
         <select formControlName="type" class="form-select border-black" style="width: 250px;">
           <option value="">Tous les Types de Congés</option>
           <option *ngFor="let type of typeConges" [value]="type.nomTypeConge">{{ type.nomTypeConge }}</option>

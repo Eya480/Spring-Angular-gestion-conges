@@ -17,7 +17,7 @@ export class EditUserComponent implements OnInit {
   errorMessage: string = '';
   role? : string;
   firstDepSelected? : string;
-  departements: departements[] = []; // List of available departments
+  departements: departements[] = [];
   postes: string[] = [
     'Développeur Frontend',
     'Développeur Backend',

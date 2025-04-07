@@ -38,7 +38,6 @@ public class DemandeCongeService {
 
         long thisYear=LocalDate.now().getYear();
         if(thisYear!=demandeConge.getDateFin().getYear()){
-            employe.setSoldeRestant(0);
             employe.setSoldeConsommes(0);
             employe.setSoldeRestant(employe.getSoldeInitial());
         }

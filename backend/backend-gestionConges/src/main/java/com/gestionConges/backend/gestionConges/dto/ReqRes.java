@@ -124,9 +124,6 @@ public class ReqRes {
         return pwd;
     }
 
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
-    }
 
     public Role getRole() {
         return role;
@@ -179,15 +176,9 @@ public class ReqRes {
         return dateEmbauche;
     }
 
-    public void setDateEmbauche(LocalDate dateEmbauche) {
-        this.dateEmbauche = dateEmbauche;
-    }
 
     public String getPoste() {
         return poste;
     }
 
-    public void setPoste(String poste) {
-        this.poste = poste;
-    }
 }
